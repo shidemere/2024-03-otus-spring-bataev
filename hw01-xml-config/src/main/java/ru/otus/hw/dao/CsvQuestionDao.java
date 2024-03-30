@@ -9,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.dao.dto.QuestionDto;
 import ru.otus.hw.domain.Question;
+import ru.otus.hw.exceptions.QuestionReadException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Реализация API для считывания вопросов.
@@ -27,7 +30,6 @@ public class CsvQuestionDao implements QuestionDao {
 
     /**
      * Считывание вопросов.
-
      */
     @Override
     public List<Question> findAll() {
@@ -36,17 +38,23 @@ public class CsvQuestionDao implements QuestionDao {
         // Использовать QuestionReadException
         // Про ресурсы: https://mkyong.com/java/java-read-a-file-from-resources-folder/
         ClassLoader classLoader = getClass().getClassLoader();
-        InputStream resourceAsStream = classLoader.getResourceAsStream(fileNameProvider.getTestFileName());
-        CSVReader csvReader = getReader(resourceAsStream, getParser());
+        try (InputStream resourceAsStream = classLoader.getResourceAsStream(fileNameProvider.getTestFileName())) {
 
-        List<QuestionDto> parsed = new CsvToBeanBuilder<QuestionDto>(csvReader)
-                .withType(QuestionDto.class)
-                .build()
-                .parse();
 
-        return parsed.stream()
-                .map(QuestionDto::toDomainObject)
-                .toList();
+            CSVReader csvReader = getReader(Objects.requireNonNull(resourceAsStream), getParser());
+
+            List<QuestionDto> parsed = new CsvToBeanBuilder<QuestionDto>(csvReader)
+                    .withType(QuestionDto.class)
+                    .build()
+                    .parse();
+
+            return parsed.stream()
+                    .map(QuestionDto::toDomainObject)
+                    .toList();
+        } catch (IOException e) {
+            String msg = "Произошла ошибка при работе с CSV файлом.";
+            throw new QuestionReadException(msg, e);
+        }
     }
 
     /**

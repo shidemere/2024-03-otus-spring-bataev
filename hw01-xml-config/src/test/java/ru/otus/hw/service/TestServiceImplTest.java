@@ -24,7 +24,9 @@ class TestServiceImplTest {
     void executeTest_verifyWork() {
         Mockito.when(questionDao.findAll()).thenReturn(Mockito.anyList());
         testService.executeTest();
-        Mockito.verify(ioService, Mockito.times(1)).prettyOutput(Mockito.anyList());
+        Mockito.verify(ioService, Mockito.times(1)).printLine(Mockito.anyString());
+        Mockito.verify(ioService, Mockito.times(1)).requireUserInfo(Mockito.anyString());
+        Mockito.verify(ioService, Mockito.times(1)).printFormattedLine(Mockito.anyString());
     }
 
 }

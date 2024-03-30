@@ -1,9 +1,6 @@
 package ru.otus.hw.service;
 
-import ru.otus.hw.domain.Question;
-
 import java.io.PrintStream;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -34,14 +31,5 @@ public class StreamsIOService implements IOService {
         printStream.printf("Hello,%s!\n", input);
     }
 
-    @Override
-    public void prettyOutput(List<Question> list) {
-        for (Question question : list) {
-            if (!question.answers().isEmpty()) {
-                System.out.println("Question: " + question.text());
-                System.out.println("\t " + question.answers().get(0));
-                System.out.println("\t " + question.answers().get(1));
-            }
-        }
-    }
+
 }

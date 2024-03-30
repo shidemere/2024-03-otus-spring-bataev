@@ -20,6 +20,26 @@ public class TestServiceImpl implements TestService {
         ioService.requireUserInfo("Enter your name, please: ");
         ioService.printFormattedLine("Please answer the questions below%n");
         List<Question> all = questionDao.findAll();
-        ioService.prettyOutput(all);
+        prettyOutput(all);
+    }
+
+    public void prettyOutput(List<Question> list) {
+        int questionCounter = 1;
+        for (Question question : list) {
+            ioService.printLine("");
+            int tabulationForAnswerCounter = 1;
+            System.out.printf("Question #%d: %s%s", questionCounter++, question.text(), "\n");
+            for (int i = 0; i < question.answers().size(); i++) {
+
+                System.out.printf(
+                        "%sAnswer #%d: %s%s",
+                        "\t".repeat(tabulationForAnswerCounter),
+                        tabulationForAnswerCounter++,
+                        question.answers().get(i),
+                        "\n"
+                );
+            }
+            ioService.printLine("");
+        }
     }
 }
