@@ -30,14 +30,13 @@ public class TestServiceImpl implements TestService {
             int tabulationForAnswerCounter = 1;
             System.out.printf("Question #%d: %s%s", questionCounter++, question.text(), "\n");
             for (int i = 0; i < question.answers().size(); i++) {
-
-                System.out.printf(
-                        "%sAnswer #%d: %s%s",
+                ioService.printFormattedLine(
+                        "%sAnswer #%d: %s",
                         "\t".repeat(tabulationForAnswerCounter),
                         tabulationForAnswerCounter++,
-                        question.answers().get(i),
-                        "\n"
+                        question.answers().get(i)
                 );
+
             }
             ioService.printLine("");
         }
