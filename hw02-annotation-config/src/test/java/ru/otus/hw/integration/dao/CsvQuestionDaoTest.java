@@ -18,9 +18,14 @@ class CsvQuestionDaoTest {
     @Autowired
     private QuestionDao questionDao;
 
+    /**
+     * Проверяет: {@link QuestionDao#findAll()}
+     * Условие: в ресурсах находится файл с вопросами.
+     * Результат: получено 5 вопросов из файла с вопросами.
+     */
     @Test
-    void someTest() {
-        List<Question> all = questionDao.findAll();
-        Assertions.assertEquals(5, all.size());
+    void findAll_get5question() {
+        List<Question> questions = questionDao.findAll();
+        Assertions.assertEquals(5, questions.size());
     }
 }

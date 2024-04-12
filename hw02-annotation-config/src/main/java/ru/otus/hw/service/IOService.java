@@ -1,5 +1,8 @@
 package ru.otus.hw.service;
 
+/**
+ * API для работы с вводом-выводом.
+ */
 public interface IOService {
     void printLine(String s);
 

@@ -8,6 +8,9 @@ import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.dao.QuestionDao;
 
+/**
+ * Конфигурационный класс для интеграционных тестов.
+ */
 @Configuration
 @PropertySource("classpath:application.properties")
 public class IntegrationTestConfiguration {

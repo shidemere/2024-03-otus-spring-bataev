@@ -13,18 +13,22 @@ import ru.otus.hw.service.ResultServiceImpl;
 import ru.otus.hw.service.StreamsIOService;
 
 class ResultServiceImplTest {
-    private TestConfig testConfig;
 
     private IOService ioService;
     private ResultService resultService;
 
     @BeforeEach
     void setUp() {
-        testConfig = Mockito.mock(AppProperties.class);
+        TestConfig testConfig = Mockito.mock(AppProperties.class);
         ioService = Mockito.mock(StreamsIOService.class);
         resultService = new ResultServiceImpl(testConfig, ioService);
     }
 
+    /**
+     * Проверяет: {@link ResultService#showResult(TestResult)}
+     * Условие: в параметрах передаётся корректный объект {@link TestResult}
+     * Результат: методы для вывода вызовутся, в сумме, 6 раз.
+     */
     @Test
     void showResult_verifyIoServiceIsCalling() {
         Student student = new Student("Salavat", "Bataev");
@@ -34,5 +38,6 @@ class ResultServiceImplTest {
         resultService.showResult(testResult);
 
         Mockito.verify(ioService, Mockito.times(3)).printFormattedLine(Mockito.anyString(), Mockito.any());
+        Mockito.verify(ioService, Mockito.times(3)).printLine(Mockito.anyString());
     }
 }
