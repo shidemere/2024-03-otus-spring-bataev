@@ -14,11 +14,6 @@ import ru.otus.hw.dao.QuestionDao;
 @Configuration
 @PropertySource("classpath:application.properties")
 public class IntegrationTestConfiguration {
-    @Bean
-    public String hello() {
-        return "Hello";
-    }
-
 
     @Bean
     public TestFileNameProvider testFileNameProvider() {

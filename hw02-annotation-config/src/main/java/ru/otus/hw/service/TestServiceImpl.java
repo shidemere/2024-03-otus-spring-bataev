@@ -25,20 +25,23 @@ public class TestServiceImpl implements TestService {
         ioService.printFormattedLine("Please answer the questions below%n");
         var questions = questionDao.findAll();
         var testResult = new TestResult(student);
-        var questionNumber = 1;
         for (var question : questions) {
-            ioService.printFormattedLine("Вопрос #%d: %s", questionNumber++, question.text());
-
-            var poorAnswer = getPoorAnswers(question);
-
+            ioService.printFormattedLine("Вопрос #%d: %s", questions.indexOf(question) + 1, question.text());
+            var poorAnswers = getPoorAnswers(question);
             var correctAnswer = getCorrectAnswer(question);
 
-            ioService.printFormattedLine("Варианты ответа: %s", poorAnswer);
+            poorAnswers
+                    .forEach(answer -> ioService.printFormattedLine(
+                            "Вариант ответа #%d: %s", poorAnswers.indexOf(answer) + 1, answer)
+                    );
 
-            var givenAnswer = ioService.readStringWithPrompt("Введите ответ: ");
+            var errorMsg = String.format(" Введённое число должно быть от 1 (включительно) до %d",
+                    question.answers().size()) + 1;
 
-            var isAnswerValid = correctAnswer.filter(answer -> givenAnswer.equalsIgnoreCase(answer.text())).isPresent();
-            testResult.applyAnswer(question, isAnswerValid);
+            var givenAnswer = ioService.readIntForRangeWithPrompt(1, 3, "Введите порядковый номер ответа: ", errorMsg);
+
+            var isAnswerValid = question.answers().indexOf(correctAnswer.orElseThrow()) + 1;
+            testResult.applyAnswer(question, givenAnswer == isAnswerValid);
         }
         return testResult;
     }

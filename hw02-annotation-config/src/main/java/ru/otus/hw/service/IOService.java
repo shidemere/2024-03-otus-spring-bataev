@@ -15,6 +15,5 @@ public interface IOService {
 
     int readIntForRange(int min, int max, String errorMessage);
 
-    // todo Как это можно применить?
     int readIntForRangeWithPrompt(int min, int max, String prompt, String errorMessage);
 }
