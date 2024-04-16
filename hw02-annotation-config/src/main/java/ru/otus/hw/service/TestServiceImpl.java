@@ -26,29 +26,37 @@ public class TestServiceImpl implements TestService {
         var questions = questionDao.findAll();
         var testResult = new TestResult(student);
         for (var question : questions) {
-            ioService.printFormattedLine("Вопрос #%d: %s", questions.indexOf(question) + 1, question.text());
             var poorAnswers = getPoorAnswers(question);
             var correctAnswer = getCorrectAnswer(question);
 
-            poorAnswers
-                    .forEach(answer -> ioService.printFormattedLine(
-                            "Вариант ответа #%d: %s", poorAnswers.indexOf(answer) + 1, answer)
-                    );
+            ioService.printFormattedLine("Вопрос #%d: %s", questions.indexOf(question) + 1, question.text());
+            poorAnswers.forEach(answer -> ioService.printFormattedLine(
+                    "Вариант ответа #%d: %s", poorAnswers.indexOf(answer) + 1, answer.text())
+            );
 
-            var errorMsg = String.format(" Введённое число должно быть от 1 (включительно) до %d",
-                    question.answers().size()) + 1;
+            var answer = getUserAnswer(poorAnswers);
+            var isRightAnswer = answer.equals(correctAnswer.orElseThrow());
 
-            var givenAnswer = ioService.readIntForRangeWithPrompt(1, 3, "Введите порядковый номер ответа: ", errorMsg);
-
-            var isAnswerValid = question.answers().indexOf(correctAnswer.orElseThrow()) + 1;
-            testResult.applyAnswer(question, givenAnswer == isAnswerValid);
+            testResult.applyAnswer(question, isRightAnswer);
         }
         return testResult;
     }
 
-    private List<String> getPoorAnswers(Question question) {
-        return question.answers().stream()
-                .map(Answer::text)
+    private Answer getUserAnswer(List<Answer> answers) {
+
+        int maximalAnswerNumber = answers.size() + 1;
+        var errorMsg = String.format(" Введённое число должно быть от 1 (включительно) до %d", maximalAnswerNumber);
+
+        int givenAnswer = ioService.readIntForRangeWithPrompt(
+                1, maximalAnswerNumber, "Введите порядковый номер ответа: ", errorMsg
+        );
+
+        return answers.get(givenAnswer - 1);
+    }
+
+    private List<Answer> getPoorAnswers(Question question) {
+        return question.answers()
+                .stream()
                 .toList();
     }
 
