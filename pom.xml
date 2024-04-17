@@ -4,14 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>
+    </parent>
 
     <groupId>ru.otus.hw</groupId>
     <artifactId>2024-03-otus-spring-bataev</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>hw01-xml-config</module>
+        <module>hw03-spring-boot</module>
     </modules>
+
     <properties>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
@@ -22,9 +30,9 @@
         <lombok.version>1.18.30</lombok.version>
         <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
         <checkstyle.version>10.11.0</checkstyle.version>
-<!--        <checkstyle.config.url>-->
-<!--            https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml-->
-<!--        </checkstyle.config.url>-->
+                <checkstyle.config.url>
+                    https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
+                </checkstyle.config.url>
     </properties>
 
     <dependencyManagement>
@@ -55,6 +63,18 @@
                 <artifactId>lombok</artifactId>
                 <optional>true</optional>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>${opencsv.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-collections</groupId>
+                        <artifactId>commons-collections</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

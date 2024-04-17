@@ -1,0 +1,6 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+Are video game championships considered sports events?|Yes%true;No%false
+Is Sherlock Holmes the greatest detective in literary history?|Yes%true;No%false
+Will artificial intelligence surpass human intelligence in the future?|Yes%true;No%false
+Are cyberattacks a significant threat to internet security?|Yes%true;No%false
+Is Mars the next step for humanity in space exploration?|Yes%true;No%false
