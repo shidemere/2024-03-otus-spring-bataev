@@ -54,8 +54,10 @@ public class TestServiceImpl implements TestService {
         // todo Я не понимаю как это пофиксить. Попроси помощи.
         /**
          * Суть проблемы:
-         * Нет понимания как можно каким нибудь String.format подставить количество ответов ко значению, которое будет подтягиваться из bundle.
-         * "The number entered must be from 1 (inclusive) to {0}" - как вместо {0} подставить maximalAnswerNumber в String.format или каком нибудь аналоге?
+         * Нет понимания как можно каким нибудь String.format подставить количество ответов ко значению,
+         *      которое будет подтягиваться из bundle.
+         * "The number entered must be from 1 (inclusive) to {0}" - как вместо {0} подставить maximalAnswerNumber в
+         *      String.format или каком нибудь аналоге?
          */
 //        String errorMsg = localizedMessagesServiceImpl.getMessage("TestService.error.message", maximalAnswerNumber);
 
