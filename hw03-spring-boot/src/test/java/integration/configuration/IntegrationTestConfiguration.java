@@ -1,31 +1,59 @@
 package integration.configuration;
 
+import integration.service.TestServiceImplTest;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import ru.otus.hw.config.AppProperties;
 import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.dao.QuestionDao;
+import ru.otus.hw.service.*;
 
-import java.util.Map;
+import java.util.Locale;
 
 @Configuration
 @PropertySource("classpath:application.yml")
 public class IntegrationTestConfiguration {
+
+    @MockBean
+    AppProperties appProperties;
+
+    @MockBean
+    LocalizedMessagesService localizedMessagesService;
+
+    @MockBean
+    StreamsIOService streamsIOService;
+
+    @MockBean
+    LocalizedIOService localizedIOService;
+
     @Bean
-    public AppProperties testFileNameProvider() {
-        AppProperties appProperties = new AppProperties();
-        // todo Я не понимаю, как это засетить через Spring.
-        // Есть ли какой то инжект в поля бинов для интеграционных тестов?
-        appProperties.setLocale("en-US");
-        appProperties.setRightAnswersCountToPass(3);
-        Map<String, String> localMap = Map.of("ru-RU", "questions_ru.csv", "en-US", "questions.csv");
-        appProperties.setFileNameByLocaleTag(localMap);
-        return appProperties;
+    public QuestionDao questionDao() {
+        Mockito.when(appProperties.getLocale()).thenReturn(Locale.forLanguageTag("en-US"));
+        Mockito.when(appProperties.getRightAnswersCountToPass()).thenReturn(3);
+        Mockito.when(appProperties.getTestFileName()).thenReturn("questions.csv");
+        return new CsvQuestionDao(appProperties);
     }
 
     @Bean
-    public QuestionDao questionDao(AppProperties appProperties) {
-        return new CsvQuestionDao(appProperties);
+    public LocalizedIOService ioService() {
+        return new LocalizedIOServiceImpl(localizedMessagesService, streamsIOService);
+    }
+
+    @Bean
+    public TestServiceImpl testServiceImplTest(QuestionDao questionDao) {
+        /**
+         * Это неправильно - делать это здесь. Но я без понятия как это сделать в TestServiceImplTest
+         */
+        Mockito.when(localizedIOService.readIntForRangeWithPromptLocalized(
+                Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString(),
+                Mockito.anyString()
+        )).thenReturn(1);
+        return new TestServiceImpl(localizedIOService, questionDao);
     }
 }
