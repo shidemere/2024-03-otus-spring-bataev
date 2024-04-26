@@ -107,13 +107,13 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
-                <!--Настроить для создания jar с зависимостями-->
-            </plugin>
+<!--Возникли проблемы совместимости с Spring-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <version>3.3.0</version>-->
+<!--                &lt;!&ndash;Настроить для создания jar с зависимостями&ndash;&gt;-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
