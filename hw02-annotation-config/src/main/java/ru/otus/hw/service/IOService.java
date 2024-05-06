@@ -8,7 +8,6 @@ public interface IOService {
 
     void printFormattedLine(String s, Object ...args);
 
-    // todo Как это можно применить?
     String readString();
 
     String readStringWithPrompt(String prompt);

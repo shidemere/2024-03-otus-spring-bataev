@@ -17,3 +17,7 @@
 
 > Находится в `hw04-spring-shell`
 
+### #9 DAO на Spring JDBC // ДЗ 
+
+> Находится в `hw05-jdbc-simple`
+
