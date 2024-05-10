@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,34 +23,24 @@ public class JdbcBookRepository implements BookRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private final JdbcGenreRepository jdbcGenreRepository;
-
-    private final JdbcAuthorRepository jdbcAuthorRepository;
-
     /**
      * Получение книги по айдишнику
      */
     @Override
     public Optional<Book> findById(long id) {
-        String findById = "SELECT id, title, author_id, genre_id FROM books WHERE id = :id";
+        String findById = """
+                SELECT b.id, b.title, b.author_id, b.genre_id, a.full_name, g.name from AUTHORS as a
+                JOIN books as b ON a.ID = b.AUTHOR_ID
+                JOIN genres as g ON b.GENRE_ID = g.ID
+                WHERE b.id = :id
+                """;
         MapSqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        Book book = jdbcTemplate.queryForObject(
-                findById,
-                namedParameters,
-                new BookRowMapper()
-        );
-
-        if (Objects.isNull(book)) {
-            return Optional.empty();
-        }
-
-
-        Optional<Author> author = jdbcAuthorRepository.findById(book.getAuthor().getId());
-        Optional<Genre> genre = jdbcGenreRepository.findById(book.getGenre().getId());
-        book.setAuthor(author.orElse(new Author()));
-        book.setGenre(genre.orElse(new Genre()));
-
-        return Optional.of(book);
+        return jdbcTemplate.query(
+                        findById,
+                        namedParameters,
+                        new BookRowMapper()
+                ).stream()
+                .findFirst();
     }
 
     /**
@@ -59,17 +48,12 @@ public class JdbcBookRepository implements BookRepository {
      */
     @Override
     public List<Book> findAll() {
-        String getAll = "SELECT id, title, author_id, genre_id FROM books";
-        List<Book> books = jdbcTemplate.query(getAll, new BookRowMapper());
-
-        return books.stream()
-                .map(book -> {
-                    Optional<Author> author = jdbcAuthorRepository.findById(book.getAuthor().getId());
-                    Optional<Genre> genre = jdbcGenreRepository.findById(book.getGenre().getId());
-                    book.setAuthor(author.orElse(new Author()));
-                    book.setGenre(genre.orElse(new Genre()));
-                    return book;
-                }).collect(Collectors.toList());
+        String getAll = """
+                SELECT b.id, b.title, b.author_id, b.genre_id, a.full_name, g.name from AUTHORS as a
+                JOIN books as b ON a.ID = b.AUTHOR_ID
+                JOIN genres as g ON b.GENRE_ID = g.ID;
+                        """;
+        return jdbcTemplate.query(getAll, new BookRowMapper());
     }
 
     /**
@@ -141,12 +125,16 @@ public class JdbcBookRepository implements BookRepository {
             String title = rs.getString("title");
             long authorId = rs.getLong("author_id");
             long genreId = rs.getLong("genre_id");
+            String authorName = rs.getString("full_name");
+            String genreName = rs.getString("name");
 
             Author author = new Author();
             author.setId(authorId);
+            author.setFullName(authorName);
 
             Genre genre = new Genre();
             genre.setId(genreId);
+            genre.setName(genreName);
 
             return new Book(id, title, author, genre);
         }
