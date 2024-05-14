@@ -20,6 +20,7 @@
         <module>hw02-annotation-config</module>
         <module>hw03-spring-boot</module>
         <module>hw04-spring-shell</module>
+        <module>hw05-jdbc-simple</module>
     </modules>
 
     <properties>
@@ -37,8 +38,6 @@
             https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
         </checkstyle.config.url>
     </properties>
-
-
 
     <dependencyManagement>
         <dependencies>
