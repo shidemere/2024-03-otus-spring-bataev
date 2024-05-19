@@ -8,10 +8,13 @@ import ru.otus.hw.models.Comment;
 @RequiredArgsConstructor
 public class CommentConverter {
 
+
+
     public String bootCommentToString(Comment comment) {
-        return "Id: %d, FullText: %s".formatted(
+        return "Id: %d, FullText: %s, Book: %s".formatted(
                 comment.getId(),
-                comment.getText()
+                comment.getText(),
+                comment.getBook().toString()
         );
     }
 
