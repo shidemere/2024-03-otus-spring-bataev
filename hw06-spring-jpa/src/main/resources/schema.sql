@@ -12,6 +12,9 @@ create table genres
     primary key (id)
 );
 
+
+
+
 create table books
 (
     id        bigint auto_increment,
@@ -23,9 +26,8 @@ create table books
 
 create table comments
 (
-    id   bigint auto_increment,
+    id        bigint auto_increment,
     comment_text varchar,
-    book_id bigint references  books (id),
+    book_id     bigint references books (id) on delete cascade,
     primary key (id)
 );
-

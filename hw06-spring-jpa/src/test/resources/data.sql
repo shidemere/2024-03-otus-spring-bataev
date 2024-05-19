@@ -9,5 +9,5 @@ values ('Genre_1'), ('Genre_2'), ('Genre_3');
 insert into books(title, author_id, genre_id)
 values ('BookTitle_1', 1, 1), ('BookTitle_2', 2, 2), ('BookTitle_3', 3, 3);
 
-insert into comments(COMMENT_TEXT, book_id)
-values ('Comment 1', 2), ('Comment 2', 2), ('Comment 3', 3);
+insert into comments(comment_text, book_id)
+values ('Comment 1', 1), ('Comment 2', 2), ('Comment 3', 3);

@@ -25,7 +25,7 @@ public class BookServiceImpl implements BookService {
      * Получение книги по айдишнику за 1 запрос к бд.
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<Book> findById(long id) {
         return bookRepository.findById(id);
     }
@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
      * Выборка всех книг. Делается 1 запросом.
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Book> findAll() {
         return bookRepository.findAll();
     }

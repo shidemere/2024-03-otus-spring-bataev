@@ -10,6 +10,7 @@ import ru.otus.hw.models.Book;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -48,8 +49,13 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void deleteById(long id) {
-        Optional<Book> book = findById(id);
-        entityManager.remove(book.orElse(null));
+        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_comment_entity_graph");
+        Book book = entityManager.find(Book.class, id, Map.of("jakarta.persistence.fetchgraph", genreAuthorEntityGraph));
+        if (Objects.isNull(book)) {
+            return;
+        }
+
+        entityManager.remove(book);
     }
 
     private Book insert(Book book) {

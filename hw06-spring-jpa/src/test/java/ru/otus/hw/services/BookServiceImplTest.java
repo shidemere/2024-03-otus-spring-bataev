@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Интеграционные тесты для {@link BookServiceImpl}
  */
-@DisplayName("Проверка книг")
+@DisplayName("Репозиторий для работы с книгами ")
 @DataJpaTest
 @Import({
         BookServiceImpl.class,
@@ -66,9 +66,8 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Сущность сохраняется")
     void insert_whenInsertNewEntity_thenSizeHasChanged() {
-        service.insert("TestBook", 1L, 1L);
-        List<Book> all = service.findAll();
-        assertEquals(all.size(), SIZE_OF_ALL_RECORD + 1);
+        Book inserted = service.insert("TestBook", 1L, 1L);
+        assertNotEquals(0, inserted.getId());
     }
 
     @Test

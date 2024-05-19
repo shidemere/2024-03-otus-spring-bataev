@@ -3,18 +3,19 @@ package ru.otus.hw.commands;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.hw.converters.BookCommentConverter;
-import ru.otus.hw.services.BookCommentService;
+import ru.otus.hw.converters.CommentConverter;
+import ru.otus.hw.models.Comment;
+import ru.otus.hw.services.CommentService;
 
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @ShellComponent
-public class BookCommentCommands {
+public class CommentCommands {
 
-    private final BookCommentConverter converter;
+    private final CommentConverter converter;
 
-    private final BookCommentService service;
+    private final CommentService service;
 
     /**
      * Найти все комментарии для книги
@@ -35,4 +36,13 @@ public class BookCommentCommands {
                 .map(converter::bootCommentToString)
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }
+
+
+    @ShellMethod(value = "Insert Comment", key = "sv")
+    public String saveComment(String text, long bookId) {
+        Comment updated = service.insert(text, bookId);
+        return updated.getText();
+    }
+
+
 }
