@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Book;
@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
         BookRepositoryImpl.class
 })
 @Transactional(propagation = Propagation.NEVER)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class BookServiceImplTest {
 
 
@@ -38,9 +39,6 @@ class BookServiceImplTest {
 
     private final long FIRST_BOOK_ID = 1L;
 
-    private final long SECOND_BOOK_ID = 2L;
-
-    private final long SIZE_OF_ALL_RECORD = 3;
 
     /**
      * Так как в ДЗ присутствует требование отключить транзакционность в тестовом классе
@@ -50,10 +48,11 @@ class BookServiceImplTest {
      */
     @Test
     @DisplayName("Идентификатор сущности совпадает с ожидаемым")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void findById_whenBookExist_thenIdMatch() {
-        Optional<Book> actualBook = service.findById(SECOND_BOOK_ID);
+        Optional<Book> actualBook = service.findById(FIRST_BOOK_ID);
         assertTrue(actualBook.isPresent());
-        assertEquals(SECOND_BOOK_ID, actualBook.get().getId());
+        assertEquals(FIRST_BOOK_ID, actualBook.get().getId());
     }
 
     @Test
@@ -83,9 +82,7 @@ class BookServiceImplTest {
     }
 
 
-    // Тест проходит только если ни один комментарий не ссылается на книгу. Я не знаю как это исправить.
     @Test
-    // @Rollback не помогает, так как его перебивает @Transactional сверху.
     @DisplayName("Сущность удаляется")
     void deleteById_whenEntityExist_thenCorrectDelete() {
         service.deleteById(FIRST_BOOK_ID);
