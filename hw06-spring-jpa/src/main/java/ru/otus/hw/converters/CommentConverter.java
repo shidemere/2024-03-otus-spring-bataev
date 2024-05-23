@@ -14,7 +14,7 @@ public class CommentConverter {
         return "Id: %d, FullText: %s, Book: %s".formatted(
                 comment.getId(),
                 comment.getText(),
-                comment.getBook().toString()
+                comment.getBook().getId()
         );
     }
 
