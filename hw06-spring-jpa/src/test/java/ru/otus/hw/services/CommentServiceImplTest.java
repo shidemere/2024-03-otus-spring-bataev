@@ -1,9 +1,11 @@
 package ru.otus.hw.services;
 
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
@@ -36,6 +38,9 @@ class CommentServiceImplTest {
     @Autowired
     private CommentServiceImpl service;
 
+    @Autowired
+    private TestEntityManager testEntityManager;
+
     private final long FIRST_COMMENT_ID = 1L;
 
     private final long BOOK_ID_THAT_HAS_TWO_COMMENTS = 2L;
@@ -57,8 +62,8 @@ class CommentServiceImplTest {
 
     @Test
     @DisplayName("Сущность сохраняется")
-    void insert_whenSaveComment_thenReturnId() {
-        Comment inserted = service.insert("text", 1);
+    void create_whenSaveComment_thenReturnId() {
+        Comment inserted = service.create("text", 1);
         System.out.println(inserted);
         assertNotEquals(0, inserted.getId());
     }
