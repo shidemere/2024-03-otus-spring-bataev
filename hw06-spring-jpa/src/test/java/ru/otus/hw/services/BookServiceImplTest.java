@@ -8,11 +8,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
+import ru.otus.hw.models.Comment;
+import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepositoryImpl;
 import ru.otus.hw.repositories.BookRepositoryImpl;
 import ru.otus.hw.repositories.GenreRepositoryImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +42,14 @@ class BookServiceImplTest {
     @Autowired
     private BookServiceImpl service;
 
+    /**
+     * Так как Lazy поля не участвуют в сравнении - можно не присваивать их
+     */
+    private final List<Book> ALL_BOOK_IN_DATABASE = Arrays.asList(
+            new Book(1L, "BookTitle_1", null, null),
+            new Book(2L, "BookTitle_2", null, null),
+            new Book(3L, "BookTitle_3", null, null)
+    );
     private final long FIRST_BOOK_ID = 1L;
 
 
@@ -57,14 +70,17 @@ class BookServiceImplTest {
 
     @Test
     @DisplayName("Все сущности находятся")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void findAll_whenExistThreeRow_thenCorrectSize() {
         List<Book> all = service.findAll();
-        assertEquals(all.size(), 3);
+
+
+        assertIterableEquals(ALL_BOOK_IN_DATABASE, all);
     }
 
     @Test
     @DisplayName("Сущность сохраняется")
-    void insert_whenInsertNewEntity_thenSizeHasChanged() {
+    void create_whenInsertNewEntity_thenSizeHasChanged() {
         Book inserted = service.insert("TestBook", 1L, 1L);
         assertNotEquals(0, inserted.getId());
     }

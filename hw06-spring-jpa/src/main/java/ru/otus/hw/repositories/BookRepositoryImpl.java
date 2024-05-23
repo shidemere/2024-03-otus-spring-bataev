@@ -23,7 +23,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_comment_entity_graph");
+        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_entity_graph");
         Book book = entityManager.find(Book.class, id, Map.of("jakarta.persistence.fetchgraph", genreAuthorEntityGraph));
         return Optional.ofNullable(book);
     }
@@ -32,7 +32,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_comment_entity_graph");
+        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_entity_graph");
         TypedQuery<Book> getAllBook = entityManager.createQuery("select b from Book b", Book.class);
 
         getAllBook.setHint("jakarta.persistence.fetchgraph", genreAuthorEntityGraph);
@@ -49,12 +49,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void deleteById(long id) {
-        EntityGraph<?> genreAuthorEntityGraph = entityManager.getEntityGraph("genre_author_comment_entity_graph");
-        Book book = entityManager.find(Book.class, id, Map.of("jakarta.persistence.fetchgraph", genreAuthorEntityGraph));
+        Book book = entityManager.find(Book.class, id);
         if (Objects.isNull(book)) {
             return;
         }
-
         entityManager.remove(book);
     }
 
