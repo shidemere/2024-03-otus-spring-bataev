@@ -1,19 +1,15 @@
-package services;
+package ru.otus.hw.services;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Comment;
-import ru.otus.hw.services.CommentServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,13 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 })
 @Transactional(propagation = Propagation.NEVER)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-
 public class CommentServiceImplTest {
     @Autowired
     private CommentServiceImpl service;
-
-    @Autowired
-    private TestEntityManager testEntityManager;
 
     private final long FIRST_COMMENT_ID = 1L;
 
@@ -85,10 +77,5 @@ public class CommentServiceImplTest {
         assertTrue(comment.isEmpty());
     }
 
-    @Configuration
-    @EnableJpaRepositories(basePackages = "ru.otus.hw.repositories")
-    @EntityScan("ru.otus.hw.models")
-    public static class JpaConfiguration {
 
-    }
 }
