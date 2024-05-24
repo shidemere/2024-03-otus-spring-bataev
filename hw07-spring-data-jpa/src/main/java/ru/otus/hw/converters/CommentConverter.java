@@ -11,10 +11,10 @@ public class CommentConverter {
 
 
     public String bootCommentToString(Comment comment) {
-        return "Id: %d, FullText: %s, Book: %s".formatted(
+        return "Id: %d, FullText: %s, Book ID: %d".formatted(
                 comment.getId(),
                 comment.getText(),
-                comment.getBook().toString()
+                comment.getBook().getId()
         );
     }
 
