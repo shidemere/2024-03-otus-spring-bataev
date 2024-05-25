@@ -15,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Builder
 @Table(name = "comments", schema = "public")
 @AllArgsConstructor
+@ToString(of = "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 public class Comment {
@@ -37,11 +39,4 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
-
-    @Override
-    public String toString() {
-        return "BookComment{" +
-                "id=" + id +
-                '}';
-    }
 }

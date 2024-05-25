@@ -11,12 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
 @Entity
 @Table(name = "authors", schema = "public")
+@ToString(of = "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,11 +30,4 @@ public class Author {
 
     @Column(name = "full_name")
     private String fullName;
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                '}';
-    }
 }

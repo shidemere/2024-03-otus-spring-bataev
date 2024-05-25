@@ -10,12 +10,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
 @Entity
 @Table(name = "genres", schema = "public")
+@ToString(of = "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,11 +28,4 @@ public class Genre {
     private long id;
 
     private String name;
-
-    @Override
-    public String toString() {
-        return "Genre{" +
-                "id=" + id +
-                '}';
-    }
 }

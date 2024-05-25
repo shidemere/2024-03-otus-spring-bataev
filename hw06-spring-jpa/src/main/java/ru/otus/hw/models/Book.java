@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Table(name = "books", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(of = "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NamedEntityGraph(name = "genre_author_entity_graph", attributeNodes = {
         @NamedAttributeNode("author"),
@@ -46,21 +48,5 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-
-//    @OneToMany(
-//            fetch = FetchType.LAZY,
-//            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-//            mappedBy = "book"
-//    )
-//    private List<Comment> comments;
-
-
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                '}';
-    }
 }
 

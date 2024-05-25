@@ -41,10 +41,8 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        if (book.getId() == 0) {
-            return insert(book);
-        }
-        return update(book);
+        entityManager.persist(book);
+        return book;
     }
 
     @Override
@@ -56,12 +54,8 @@ public class BookRepositoryImpl implements BookRepository {
         entityManager.remove(book);
     }
 
-    private Book insert(Book book) {
-        entityManager.persist(book);
-        return book;
-    }
-
-    private Book update(Book book) {
+    @Override
+    public Book update(Book book) {
         return entityManager.merge(book);
     }
 
