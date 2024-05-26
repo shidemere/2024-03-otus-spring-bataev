@@ -21,3 +21,6 @@
 
 > Находится в `hw05-jdbc-simple`
 
+### #11 JPQL, Spring ORM, DAO на основе Spring ORM + JPA // ДЗ
+
+> Находится в `hw06-spring-jpa`
