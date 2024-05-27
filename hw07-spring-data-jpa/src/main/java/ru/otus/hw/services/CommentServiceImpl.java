@@ -37,19 +37,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment update(long id, String text) {
-        Optional<Comment> comment = commentRepository.findById(id);
         String errMsg = "Не существует комментария для обновления";
-        comment.orElseThrow(() -> new EntityNotFoundException(errMsg)).setText(text);
-        return commentRepository.save(comment.get());
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(errMsg));
+        comment.setText(text);
+        return commentRepository.save(comment);
     }
 
     @Override
     @Transactional
-    public Comment insert(String text, long bookId) {
-        Optional<Book> book = bookRepository.findById(bookId);
+    public Comment create(String text, long bookId) {
+        String errMsg = "Нет книги, для добавления комментария";
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException(errMsg));
         Comment comment = Comment.builder()
                 .text(text)
-                .book(book.orElseThrow(() -> new EntityNotFoundException("Нет книги, для добавления комментария")))
+                .book(book)
                 .build();
         return commentRepository.save(comment);
     }

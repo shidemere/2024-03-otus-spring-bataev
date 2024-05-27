@@ -10,27 +10,22 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
 @Entity
+@ToString(of = "id")
+@EqualsAndHashCode(of = "id")
 @Table(name = "genres", schema = "public")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Genre {
     @Id
-    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
 
-    @Override
-    public String toString() {
-        return "Genre{" +
-                "id=" + id +
-                '}';
-    }
 }

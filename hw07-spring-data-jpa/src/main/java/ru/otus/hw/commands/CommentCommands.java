@@ -42,7 +42,7 @@ public class CommentCommands {
 
     @ShellMethod(value = "Insert Comment", key = "sv")
     public String saveComment(String text, long bookId) {
-        Comment updated = service.insert(text, bookId);
+        Comment updated = service.create(text, bookId);
         return updated.getText();
     }
 

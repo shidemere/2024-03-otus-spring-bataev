@@ -1,11 +1,11 @@
-create table authors
+create table if not exists authors
 (
     id        bigint auto_increment,
     full_name varchar(255),
     primary key (id)
 );
 
-create table genres
+create table if not exists genres
 (
     id   bigint auto_increment,
     name varchar(255),
@@ -15,7 +15,7 @@ create table genres
 
 
 
-create table books
+create table if not exists books
 (
     id        bigint auto_increment,
     title     varchar(255),
@@ -24,7 +24,7 @@ create table books
     primary key (id)
 );
 
-create table comments
+create table if not exists comments
 (
     id        bigint auto_increment,
     comment_text varchar,

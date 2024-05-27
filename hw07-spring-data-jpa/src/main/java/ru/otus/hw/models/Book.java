@@ -16,16 +16,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Getter
 @Setter
 @Entity
 @Builder
+@ToString(of = "id")
 @Table(name = "books", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 @NamedEntityGraph(name = "genre_author_entity_graph", attributeNodes = {
         @NamedAttributeNode("author"),
         @NamedAttributeNode("genre"),
@@ -33,7 +35,6 @@ import lombok.Setter;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
 
     private String title;
@@ -45,14 +46,5 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
     private Genre genre;
-
-
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                '}';
-    }
 }
 
