@@ -8,15 +8,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
-import ru.otus.hw.models.Comment;
-import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepositoryImpl;
 import ru.otus.hw.repositories.BookRepositoryImpl;
 import ru.otus.hw.repositories.GenreRepositoryImpl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +77,7 @@ class BookServiceImplTest {
     @Test
     @DisplayName("Сущность сохраняется")
     void create_whenInsertNewEntity_thenSizeHasChanged() {
-        Book inserted = service.insert("TestBook", 1L, 1L);
+        Book inserted = service.create("TestBook", 1L, 1L);
         assertNotEquals(0, inserted.getId());
     }
 

@@ -44,8 +44,18 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     @Transactional
-    public Book insert(String title, long authorId, long genreId) {
-        return save(0, title, authorId, genreId);
+    public Book create(String title, long authorId, long genreId) {
+        var author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+        var genre = genreRepository.findById(genreId)
+                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
+        var book = Book.builder()
+                .id(0)
+                .title(title)
+                .author(author)
+                .genre(genre)
+                .build();
+        return bookRepository.save(book);
     }
 
     /**
@@ -54,24 +64,6 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book update(long id, String title, long authorId, long genreId) {
-        return save(id, title, authorId, genreId);
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(long id) {
-        bookRepository.deleteById(id);
-    }
-
-    /**
-     * Я не совсем понимаю следующее поведение.
-     * Для инсерта происходит три запроса: селект автора, селект жанра, инсерт.
-     * Для апдейта происходит четыре запроса: селекет автора, селект жанра, селект книги, апдейт.
-     * Перед апдейтом нужно сделать селект, получается?
-     * UPD: Ответ эксперта: да верно
-     * Самих запросов может не быть, EM можете закешировать данные
-     */
-    private Book save(long id, String title, long authorId, long genreId) {
         var author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
@@ -82,6 +74,13 @@ public class BookServiceImpl implements BookService {
                 .author(author)
                 .genre(genre)
                 .build();
-        return bookRepository.save(book);
+        return bookRepository.update(book);
     }
+
+    @Override
+    @Transactional
+    public void deleteById(long id) {
+        bookRepository.deleteById(id);
+    }
+
 }
