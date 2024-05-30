@@ -39,7 +39,7 @@ public class ModelsCommonTest {
             <version>${reflections.version}</version>
         </dependency>
          */
-        var reflections = new Reflections("ru.otus.hw.models");
+        var reflections = new Reflections("ru.otus.hw.model");
         entitiesClasses = reflections.getTypesAnnotatedWith(Entity.class);
 
     }
