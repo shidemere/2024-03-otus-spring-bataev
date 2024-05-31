@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "ru.otus.hw.repository")
-@EntityScan("ru.otus.hw.models")
+@EntityScan("ru.otus.hw.model")
 public class Homework07 {
 
 	public static void main(String[] args) {
