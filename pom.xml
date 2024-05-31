@@ -22,6 +22,7 @@
         <module>hw04-spring-shell</module>
         <module>hw05-jdbc-simple</module>
         <module>hw06-spring-jpa</module>
+        <module>hw07-spring-data-jpa</module>
     </modules>
 
     <properties>
@@ -55,6 +56,8 @@
                 <scope>test</scope>
                 <version>${mockito.version}</version>
             </dependency>
+
+
 
             <dependency>
                 <groupId>org.assertj</groupId>

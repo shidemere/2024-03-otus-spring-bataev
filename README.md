@@ -24,3 +24,7 @@
 ### #11 JPQL, Spring ORM, DAO на основе Spring ORM + JPA // ДЗ
 
 > Находится в `hw06-spring-jpa`
+
+### #13 Белая магия Spring Data: Spring Data JPA // ДЗ
+
+> Находится в `hw07-spring-data-jpa`
