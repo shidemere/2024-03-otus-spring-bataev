@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converter.CommentConverter;
-import ru.otus.hw.model.Author;
-import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
-import ru.otus.hw.model.Genre;
 import ru.otus.hw.service.CommentService;
 
 import java.util.stream.Collectors;
@@ -45,11 +42,8 @@ public class CommentCommands {
      * Создать комментарий
      */
     @ShellMethod(value = "Insert Comment", key = "sv")
-    public String saveComment(String text, String bookText, String authorName, String genreName) {
-        Author author = new Author(authorName);
-        Genre genre = new Genre(genreName);
-        Book book = new Book(bookText, author, genre);
-        Comment updated = service.create(text, book);
+    public String saveComment(String text, String bookText) {
+        Comment updated = service.create(text, bookText);
         return updated.getText();
     }
 

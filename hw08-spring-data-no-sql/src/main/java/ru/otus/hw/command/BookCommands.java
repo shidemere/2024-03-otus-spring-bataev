@@ -44,9 +44,8 @@ public class BookCommands {
      */
     @ShellMethod(value = "Insert book", key = "bins")
     public String insertBook(String title, String authorName, String genreText) {
-        Author author = new Author(authorName);
-        Genre genre = new Genre(genreText);
-        var savedBook = bookService.create(title, author, genre);
+
+        var savedBook = bookService.create(title, authorName, genreText);
         return bookConverter.bookToString(savedBook);
     }
 
@@ -55,9 +54,7 @@ public class BookCommands {
      */
     @ShellMethod(value = "Update book", key = "bupd")
     public String updateBook(String id, String title,  String authorName,  String genreText) {
-        Author author = new Author(authorName);
-        Genre genre = new Genre(genreText);
-        var savedBook = bookService.update(id, title, author, genre);
+        var savedBook = bookService.update(id, title, authorName, genreText);
         return bookConverter.bookToString(savedBook);
     }
 

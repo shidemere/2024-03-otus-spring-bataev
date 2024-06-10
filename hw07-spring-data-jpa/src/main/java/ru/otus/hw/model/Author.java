@@ -25,7 +25,6 @@ import lombok.ToString;
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
 
     @Column(name = "full_name")

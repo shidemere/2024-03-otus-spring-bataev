@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
+import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.CommentRepository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
+    private final BookRepository bookRepository;
 
 
     @Override
@@ -38,7 +40,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment create(String text, Book book) {
+    public Comment create(String text, String bookId) {
+        String errMsg = "Книги для создаваемого комментария не существует";
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException(errMsg));
         Comment comment = Comment.builder()
                 .text(text)
                 .book(book)

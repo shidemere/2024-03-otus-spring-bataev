@@ -16,5 +16,12 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
+
+    @Override
+    public Author create(String name) {
+        Author author = new Author();
+        author.setFullName(name);
+        return authorRepository.save(author);
+    }
 }
 
