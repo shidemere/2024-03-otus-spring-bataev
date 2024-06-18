@@ -28,3 +28,7 @@
 ### #13 Белая магия Spring Data: Spring Data JPA // ДЗ
 
 > Находится в `hw07-spring-data-jpa`
+
+### #15 Spring Data для подключения к нереляционным БД // ДЗ
+
+> Находится в `hw08-spring-data-no-sql`

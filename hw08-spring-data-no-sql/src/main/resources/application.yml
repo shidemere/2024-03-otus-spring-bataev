@@ -1,0 +1,21 @@
+spring:
+  data:
+    mongodb:
+      port: 27017 # when flapdoodle using should be 0
+      database: homework
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+mongock:
+#  runner-type: "ApplicationRunner" # default
+  runner-type: InitializingBean #when work with spring shell
+  change-logs-scan-package:
+    - ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: true
+    read-concern: local
