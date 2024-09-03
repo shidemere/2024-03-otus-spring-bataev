@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Library</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+<h3>Library</h3>
+
+<!--
+    action определяет, куда будет отправлена форма после нажатия кнопки, но таймлиф переопределяет это дело
+    th:action генерирует URL по которому я буду ходить. То есть я буду идти по маппингу my_site/list
+-->
+<form id="start-page" action="list.html" th:action="@{/list}">
+    <div class="row">
+        <button type="submit">Open the Library</button>
+    </div>
+</form>
+</body>
+</html>
