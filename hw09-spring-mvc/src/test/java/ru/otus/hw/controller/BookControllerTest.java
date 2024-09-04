@@ -1,74 +1,157 @@
 package ru.otus.hw.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.hw.mapper.BookCreateMapper;
-import ru.otus.hw.mapper.BookUpdateMapper;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.otus.hw.dto.BookCreateDto;
+import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
-import ru.otus.hw.repository.BookRepository;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import ru.otus.hw.service.AuthorService;
+import ru.otus.hw.service.BookService;
+import ru.otus.hw.service.GenreService;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = BookController.class)
 class BookControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    List<Book> books;
+
     @MockBean
-    private BookRepository bookRepository;
-    @Autowired
-    BookUpdateMapper bookUpdateMapper;
-    @Autowired
-    BookCreateMapper bookCreateMapper;
+    private BookService bookService;
+    @MockBean
+    private GenreService genreService;
+    @MockBean
+    private AuthorService authorService;
 
-
-
-    @Test
-    void shouldReturnCorrectBooksList() {
-        List<Book> books = List.of(
+    @BeforeEach
+    public void setup() {
+        books = List.of(
                 new Book(1L, "Отцы и дети", new Author(1L, "Тургенев"), new Genre(1L, "Роман")),
                 new Book(2L, "Илиада", new Author(2L, "Поэма"), new Genre(2L, "Поэма")),
                 new Book(3L, "Книга пяти колец", new Author(3L, "Трактат"), new Genre(3L, "Трактат"))
         );
-        given(bookRepository.findAll()).willReturn(books);
 
+
+    }
+
+    @Test
+    @DisplayName("Книги корректно получаются")
+    void shouldReturnCorrectBooksList() throws Exception {
+
+        Mockito.when(bookService.findAll()).thenReturn(books);
 
         mockMvc.perform(get("/list"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString()))
+                .andExpect(MockMvcResultMatchers.view().name("list"))
+                .andExpect(MockMvcResultMatchers.model().attribute("books", books));
+    }
+
+
+    @Test
+    @DisplayName("Книги корректно удаляются")
+    void shouldCorrectDeleteBook() throws Exception {
+
+        long bookId = 1L;
+
+        Mockito.doNothing().when(bookService).deleteById(bookId);
+        Mockito.when(bookService.findAll()).thenReturn(books);
+
+        mockMvc.perform(get("/delete/book/{id}", bookId))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("list"))
+                .andExpect(MockMvcResultMatchers.model().attribute("books", books));
+
+        Mockito.verify(bookService, Mockito.times(1)).deleteById(bookId);
     }
 
     @Test
-    void deleteBook() {
+    @DisplayName("Книга корректно загружается для редактирования")
+    void shouldLoadBookForEdit() throws Exception {
+        long bookId = 1L;
+        Book book = books.get(0);
+        List<Author> authors = List.of(new Author(1L, "Тургенев"));
+        List<Genre> genres = List.of(new Genre(1L, "Роман"));
+
+        Mockito.when(bookService.findById(bookId)).thenReturn(Optional.of(book));
+        Mockito.when(authorService.findAll()).thenReturn(authors);
+        Mockito.when(genreService.findAll()).thenReturn(genres);
+
+        mockMvc.perform(get("/edit/book/{id}", bookId))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("edit"))
+                .andExpect(MockMvcResultMatchers.model().attribute("book", book))
+                .andExpect(MockMvcResultMatchers.model().attribute("authors", authors))
+                .andExpect(MockMvcResultMatchers.model().attribute("genres", genres));
+
+        Mockito.verify(bookService, Mockito.times(1)).findById(bookId);
+        Mockito.verify(authorService, Mockito.times(1)).findAll();
+        Mockito.verify(genreService, Mockito.times(1)).findAll();
     }
 
     @Test
-    void editBook() {
+    @DisplayName("Книга корректно обновляется")
+    void shouldUpdateBook() throws Exception {
+        BookUpdateDto bookUpdateDto = new BookUpdateDto(1L, "Отцы и дети", 1L, 1L);
+        Book updatedBook = new Book(1L, "Отцы и дети", new Author(1L, "Тургенев"), new Genre(1L, "Роман"));
+
+        Mockito.when(bookService.update(bookUpdateDto)).thenReturn(updatedBook);
+
+        mockMvc.perform(post("/edit/book/{id}", bookUpdateDto.getId())
+                        .flashAttr("bookUpdateDto", bookUpdateDto))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/list"));
+
+        Mockito.verify(bookService, Mockito.times(1)).update(bookUpdateDto);
     }
 
     @Test
-    void update() {
+    @DisplayName("Форма для создания книги корректно загружается")
+    void shouldLoadCreateBookForm() throws Exception {
+        List<Author> authors = List.of(new Author(1L, "Тургенев"));
+        List<Genre> genres = List.of(new Genre(1L, "Роман"));
+
+        Mockito.when(authorService.findAll()).thenReturn(authors);
+        Mockito.when(genreService.findAll()).thenReturn(genres);
+
+        mockMvc.perform(get("/create/book"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("create"))
+                .andExpect(MockMvcResultMatchers.model().attribute("authors", authors))
+                .andExpect(MockMvcResultMatchers.model().attribute("genres", genres));
+
+        Mockito.verify(authorService, Mockito.times(1)).findAll();
+        Mockito.verify(genreService, Mockito.times(1)).findAll();
     }
 
     @Test
-    void createBook() {
-    }
+    @DisplayName("Книга корректно создается")
+    void shouldCreateBook() throws Exception {
+        BookCreateDto bookCreateDto = new BookCreateDto("Отцы и дети", 1L, 1L);
+        Book createdBook = new Book(1L, "Отцы и дети", new Author(1L, "Тургенев"), new Genre(1L, "Роман"));
 
-    @Test
-    void create() {
+        Mockito.when(bookService.create(bookCreateDto)).thenReturn(createdBook);
+
+        mockMvc.perform(post("/create/book")
+                        .flashAttr("bookCreateDto", bookCreateDto))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/list"));
+
+        Mockito.verify(bookService, Mockito.times(1)).create(bookCreateDto);
     }
 }
