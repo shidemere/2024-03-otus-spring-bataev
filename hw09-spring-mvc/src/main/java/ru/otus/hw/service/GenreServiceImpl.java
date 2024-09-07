@@ -13,6 +13,10 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
+    /**
+     * Трназкционно считывает данные из БД.
+     * @return лист жанров.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Genre> findAll() {
