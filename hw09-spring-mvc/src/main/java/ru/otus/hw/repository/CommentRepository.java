@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @EntityGraph(value = "book_entity_graph")
     List<Comment> findByBookId(long id);
 
 

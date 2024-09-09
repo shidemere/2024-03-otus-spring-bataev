@@ -44,8 +44,7 @@ public class BookController {
 
     @GetMapping("edit/book/{id}")
     public String editBook(@PathVariable long id, Model model) {
-        String msg = "Книги с данным ID нет в базе.";
-        Book book = bookService.findById(id).orElseThrow(() -> new EntityNotFoundException(msg));
+        Book book = bookService.findById(id);
         List<Author> authors = authorService.findAll();
         List<Genre> genres = genreService.findAll();
         model.addAttribute("book", book);
@@ -55,7 +54,7 @@ public class BookController {
     }
 
     @PostMapping("/edit/book/{id}")
-    public String update(@Valid BookUpdateDto bookUpdateDto, BindingResult bindingResult) {
+    public String update(@Valid BookUpdateDto bookUpdateDto, BindingResult bindingResult ) {
         if (bindingResult.hasErrors()) {
             return String.format("redirect:/edit/book/%d", bookUpdateDto.getId());
         }

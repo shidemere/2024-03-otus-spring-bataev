@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.BookCreateDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.mapper.AuthorMapper;
-import ru.otus.hw.mapper.BookCreateMapper;
-import ru.otus.hw.mapper.BookUpdateMapper;
+import ru.otus.hw.mapper.BookMapper;
 import ru.otus.hw.mapper.GenreMapper;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
@@ -18,7 +17,6 @@ import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.GenreRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,12 +25,14 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Book> findById(long id) {
-        return bookRepository.findById(id);
+    public Book findById(long id) {
+        String msg = "Книги с данным ID нет в базе.";
+        return bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(msg));
     }
 
     @Override
@@ -48,13 +48,9 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(dto.getAuthorId())));
         var genre = genreRepository.findById(dto.getGenreId())
                 .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(dto.getGenreId())));
-
-        var book = Book.builder()
-                .id(0)
-                .title(dto.getTitle())
-                .author(author)
-                .genre(genre)
-                .build();
+        Book book = bookMapper.toBook(dto);
+        book.setAuthor(author);
+        book.setGenre(genre);
         return bookRepository.save(book);
     }
 

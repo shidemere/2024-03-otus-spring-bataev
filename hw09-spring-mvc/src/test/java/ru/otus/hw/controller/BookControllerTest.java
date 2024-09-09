@@ -88,7 +88,7 @@ class BookControllerTest {
         List<Author> authors = List.of(new Author(1L, "Тургенев"));
         List<Genre> genres = List.of(new Genre(1L, "Роман"));
 
-        Mockito.when(bookService.findById(bookId)).thenReturn(Optional.of(book));
+        Mockito.when(bookService.findById(bookId)).thenReturn(book);
         Mockito.when(authorService.findAll()).thenReturn(authors);
         Mockito.when(genreService.findAll()).thenReturn(genres);
 

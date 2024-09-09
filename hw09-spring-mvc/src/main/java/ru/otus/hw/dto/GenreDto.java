@@ -1,13 +1,10 @@
 package ru.otus.hw.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
 public class GenreDto {
 
     private Long id;
