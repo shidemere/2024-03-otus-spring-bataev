@@ -17,8 +17,8 @@ public class BookDto {
     private String title;
 
     @NotNull
-    private Long authorId;
+    private AuthorDto author;
 
     @NotNull
-    private Long genreId;
+    private GenreDto genre;
 }

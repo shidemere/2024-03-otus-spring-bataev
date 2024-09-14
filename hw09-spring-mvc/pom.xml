@@ -23,7 +23,7 @@
         <checkstyle.config.url>
             https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
         </checkstyle.config.url>
-<!--        mapstruct binding with lombok-->
+        <!--        mapstruct binding with lombok-->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <maven.compiler.plugin>3.11.0</maven.compiler.plugin>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
@@ -79,6 +79,12 @@
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

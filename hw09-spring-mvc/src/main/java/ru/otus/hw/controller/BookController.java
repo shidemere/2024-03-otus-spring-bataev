@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.hw.dto.BookCreateDto;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookUpdateDto;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
@@ -29,7 +30,7 @@ public class BookController {
 
     @GetMapping("/list")
     public String getBooks(Model model) {
-        List<Book> books = bookService.findAll();
+        List<BookDto> books = bookService.findAll();
         model.addAllAttributes(Map.of("books", books));
         return "list";
     }
@@ -37,14 +38,14 @@ public class BookController {
     @GetMapping("delete/book/{id}")
     public String deleteBook(@PathVariable long id, Model model) {
         bookService.deleteById(id);
-        List<Book> books = bookService.findAll();
+        List<BookDto> books = bookService.findAll();
         model.addAllAttributes(Map.of("books", books));
         return "list";
     }
 
     @GetMapping("edit/book/{id}")
     public String editBook(@PathVariable long id, Model model) {
-        Book book = bookService.findById(id);
+        BookDto book = bookService.findById(id);
         List<Author> authors = authorService.findAll();
         List<Genre> genres = genreService.findAll();
         model.addAttribute("book", book);
@@ -54,10 +55,11 @@ public class BookController {
     }
 
     @PostMapping("/edit/book/{id}")
-    public String update(@Valid BookUpdateDto bookUpdateDto, BindingResult bindingResult ) {
+    public String update(@Valid BookUpdateDto bookUpdateDto, BindingResult bindingResult, @PathVariable long id ) {
         if (bindingResult.hasErrors()) {
-            return String.format("redirect:/edit/book/%d", bookUpdateDto.getId());
+            return String.format("redirect:/edit/book/%d", id);
         }
+        bookUpdateDto.setId(id);
         bookService.update(bookUpdateDto);
 
         return "redirect:/list";

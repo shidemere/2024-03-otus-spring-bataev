@@ -6,11 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ru.otus.hw.dto.BookCreateDto;
-import ru.otus.hw.dto.BookUpdateDto;
+import ru.otus.hw.dto.*;
+import ru.otus.hw.mapper.AuthorMapperImpl;
+import ru.otus.hw.mapper.BookMapper;
+import ru.otus.hw.mapper.BookMapperImpl;
+import ru.otus.hw.mapper.GenreMapperImpl;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
@@ -26,6 +31,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = BookController.class)
+@Import({
+        BookMapperImpl.class,
+        AuthorMapperImpl.class,
+        GenreMapperImpl.class
+})
 class BookControllerTest {
 
     @Autowired
@@ -38,6 +48,8 @@ class BookControllerTest {
     private GenreService genreService;
     @MockBean
     private AuthorService authorService;
+    @Autowired
+    BookMapper bookMapper;
 
     @BeforeEach
     public void setup() {
@@ -53,29 +65,29 @@ class BookControllerTest {
     @Test
     @DisplayName("Книги корректно получаются")
     void shouldReturnCorrectBooksList() throws Exception {
-
-        Mockito.when(bookService.findAll()).thenReturn(books);
+        List<BookDto> dtoList = books.stream().map(bookMapper::toBookDto).toList();
+        Mockito.when(bookService.findAll()).thenReturn(dtoList);
 
         mockMvc.perform(get("/list"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("list"))
-                .andExpect(MockMvcResultMatchers.model().attribute("books", books));
+                .andExpect(MockMvcResultMatchers.model().attribute("books", dtoList));
     }
 
 
     @Test
     @DisplayName("Книги корректно удаляются")
     void shouldCorrectDeleteBook() throws Exception {
-
+        List<BookDto> dtoList = books.stream().map(bookMapper::toBookDto).toList();
         long bookId = 1L;
 
         Mockito.doNothing().when(bookService).deleteById(bookId);
-        Mockito.when(bookService.findAll()).thenReturn(books);
+        Mockito.when(bookService.findAll()).thenReturn(dtoList);
 
         mockMvc.perform(get("/delete/book/{id}", bookId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("list"))
-                .andExpect(MockMvcResultMatchers.model().attribute("books", books));
+                .andExpect(MockMvcResultMatchers.model().attribute("books", dtoList));
 
         Mockito.verify(bookService, Mockito.times(1)).deleteById(bookId);
     }
@@ -83,8 +95,9 @@ class BookControllerTest {
     @Test
     @DisplayName("Книга корректно загружается для редактирования")
     void shouldLoadBookForEdit() throws Exception {
+
         long bookId = 1L;
-        Book book = books.get(0);
+        BookDto book = bookMapper.toBookDto(books.get(0));
         List<Author> authors = List.of(new Author(1L, "Тургенев"));
         List<Genre> genres = List.of(new Genre(1L, "Роман"));
 
@@ -108,7 +121,7 @@ class BookControllerTest {
     @DisplayName("Книга корректно обновляется")
     void shouldUpdateBook() throws Exception {
         BookUpdateDto bookUpdateDto = new BookUpdateDto(1L, "Отцы и дети", 1L, 1L);
-        Book updatedBook = new Book(1L, "Отцы и дети", new Author(1L, "Тургенев"), new Genre(1L, "Роман"));
+        BookDto updatedBook = new BookDto(1L, "Отцы и дети", new AuthorDto(1L, "Тургенев"), new GenreDto(1L, "Роман"));
 
         Mockito.when(bookService.update(bookUpdateDto)).thenReturn(updatedBook);
 
@@ -143,7 +156,7 @@ class BookControllerTest {
     @DisplayName("Книга корректно создается")
     void shouldCreateBook() throws Exception {
         BookCreateDto bookCreateDto = new BookCreateDto("Отцы и дети", 1L, 1L);
-        Book createdBook = new Book(1L, "Отцы и дети", new Author(1L, "Тургенев"), new Genre(1L, "Роман"));
+        BookDto createdBook = new BookDto(1L, "Отцы и дети", new AuthorDto(1L, "Тургенев"), new GenreDto(1L, "Роман"));
 
         Mockito.when(bookService.create(bookCreateDto)).thenReturn(createdBook);
 
