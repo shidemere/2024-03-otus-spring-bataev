@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Genre</title>
+    <link rel="stylesheet" href="/css/genre.css">
+</head>
+<body>
+
+<!-- Форма добавления жанра -->
+<form id="add-genre-form">
+    <h3>Add New Genre:</h3>
+
+    <div class="row">
+        <label for="genre-name-input">Genre Name:</label>
+        <input id="genre-name-input" name="name" type="text" placeholder="Enter genre name" required />
+    </div>
+
+    <div class="row">
+        <button type="submit" class="button save-button">Add</button>
+        <a href="/list" methods="get" class="button cancel-button">Cancel</a>
+    </div>
+</form>
+
+<!-- Всплывающее окно для уведомлений -->
+<div id="notification" class="notification">
+    <p>Genre was added</p>
+</div>
+
+<script src="/js/genre.js"></script>
+</body>
+</html>
