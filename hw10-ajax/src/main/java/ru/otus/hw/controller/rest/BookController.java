@@ -1,5 +1,6 @@
 package ru.otus.hw.controller.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.hw.dto.BookCreateDto;
@@ -26,7 +27,7 @@ public class BookController {
     }
 
     @PutMapping("api/v1/book/{id}")
-    public BookDto update(@RequestBody BookUpdateDto bookUpdateDto) {
+    public BookDto update(@Valid @RequestBody BookUpdateDto bookUpdateDto) {
         return bookService.update(bookUpdateDto);
     }
 
@@ -36,7 +37,7 @@ public class BookController {
     }
 
     @PostMapping("api/v1/book")
-    public BookDto create(@RequestBody BookCreateDto bookDto) {
+    public BookDto create(@Valid @RequestBody BookCreateDto bookDto) {
         return bookService.create(bookDto);
     }
 

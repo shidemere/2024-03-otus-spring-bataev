@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public BookDto findById(long id) {
-        String msg = "Книги с данным ID нет в базе.";
+        String msg = String.format("Книги с данным {ID=%d} нет в базе.", id);
         Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(msg));
         return bookMapper.toBookDto(book);
     }

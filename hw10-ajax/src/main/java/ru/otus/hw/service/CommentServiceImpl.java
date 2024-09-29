@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.mapper.CommentMapper;
 import ru.otus.hw.model.Book;
@@ -20,7 +21,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final BookRepository bookRepository;
 
     private final CommentMapper commentMapper;
 
@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto create(CommentDto dto) {
+    public CommentDto create(CommentCreateDto dto) {
         Comment saved = commentRepository.save(commentMapper.toComment(dto));
         return commentMapper.toCommentDto(saved);
     }

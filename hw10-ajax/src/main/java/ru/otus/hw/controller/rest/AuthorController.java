@@ -1,5 +1,6 @@
 package ru.otus.hw.controller.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class AuthorController {
     }
 
     @PostMapping("api/v1/author")
-    public AuthorDto addAuthor(@RequestBody AuthorDto dto) {
+    public AuthorDto addAuthor(@Valid @RequestBody AuthorDto dto) {
         return authorService.save(dto);
     }
 

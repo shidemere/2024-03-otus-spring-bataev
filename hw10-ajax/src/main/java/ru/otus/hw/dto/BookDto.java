@@ -14,8 +14,6 @@ public class BookDto {
 
     private Long id;
 
-    @NotBlank(message = "The book title must contain at least one simbol.")
-    @Length(min = 3, message = "The book title cannot be shorter than three characters.")
     private String title;
 
     private AuthorDto author;

@@ -11,9 +11,6 @@ import lombok.*;
 @Table(name = "comments", schema = "public")
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@NamedEntityGraph(name = "book_entity_graph", attributeNodes = {
-        @NamedAttributeNode("book"),
-})
 @NoArgsConstructor
 public class Comment {
     @Id

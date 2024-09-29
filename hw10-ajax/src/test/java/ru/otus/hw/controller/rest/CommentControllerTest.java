@@ -9,10 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.otus.hw.controller.utils.JsonUtils;
-import ru.otus.hw.dto.AuthorDto;
-import ru.otus.hw.dto.BookDto;
-import ru.otus.hw.dto.CommentDto;
-import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.dto.*;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
@@ -69,7 +66,7 @@ class CommentControllerTest {
         CommentDto requestDto = new CommentDto(null, "Круто!", dto);
         CommentDto responseDto = new CommentDto(1L, "Круто!", dto);
 
-        when(commentService.create(any(CommentDto.class))).thenReturn(responseDto);
+        when(commentService.create(any(CommentCreateDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(post("http://localhost:8080/api/v1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
