@@ -1,5 +1,6 @@
 package ru.otus.hw.controller.rest;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import ru.otus.hw.service.BookService;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = BookController.class)
 @AutoConfigureMockMvc
@@ -39,13 +43,13 @@ class BookControllerTest {
 
         when(bookService.findAll()).thenReturn(books);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/api/v1/book"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("Book One"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("Book Two"));
+        mockMvc.perform(get("http://localhost:8080/api/v1/book"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].title").value("Book One"))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].title").value("Book Two"));
     }
 
     @Test
@@ -55,13 +59,40 @@ class BookControllerTest {
 
         when(bookService.findById(bookId)).thenReturn(book);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/api/v1/book/{id}", bookId))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(bookId))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Книга"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.author.fullName").value("Автор"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.genre.name").value("Жанр"));
+        mockMvc.perform(get("http://localhost:8080/api/v1/book/{id}", bookId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(bookId))
+                .andExpect(jsonPath("$.title").value("Книга"))
+                .andExpect(jsonPath("$.author.fullName").value("Автор"))
+                .andExpect(jsonPath("$.genre.name").value("Жанр"));
+    }
+
+    @Test
+    void shouldReturn404WhenBookNotFoundWhileGettingBooks() throws Exception {
+        long bookId = 16L;
+        when(bookService.findById(bookId)).thenThrow(new EntityNotFoundException("Book not found"));
+
+        // Выполнение GET-запроса и проверка результата
+        mockMvc.perform(get("/api/v1/book/{id}", bookId))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Book not found"));
+    }
+
+    @Test
+    void shouldReturn400WhenRuntimeExceptionInCreate() throws Exception {
+        BookCreateDto createDto = new BookCreateDto("Какое то название", 4L, 4L);
+        when(bookService.create(Mockito.any(BookCreateDto.class))).thenThrow(new RuntimeException("Runtime exception occurred"));
+
+        mockMvc.perform(
+                    post("/api/v1/book")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(JsonUtils.toJson(createDto))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Runtime exception occurred"));
     }
 
     @Test
@@ -71,15 +102,15 @@ class BookControllerTest {
 
         when(bookService.create(Mockito.any(BookCreateDto.class))).thenReturn(responseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:8080/api/v1/book")
+        mockMvc.perform(post("http://localhost:8080/api/v1/book")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.toJson(requestDto)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Книга"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.author.fullName").value("Автор один"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.genre.name").value("Жанр два"));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Книга"))
+                .andExpect(jsonPath("$.author.fullName").value("Автор один"))
+                .andExpect(jsonPath("$.genre.name").value("Жанр два"));
     }
 
     @Test
@@ -89,23 +120,23 @@ class BookControllerTest {
 
         when(bookService.update(Mockito.any(BookUpdateDto.class))).thenReturn(responseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("http://localhost:8080/api/v1/book/{id}", 1L)
+        mockMvc.perform(put("http://localhost:8080/api/v1/book/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.toJson(requestDto)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Обновленная книга"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.author.fullName").value("Автор один"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.genre.name").value("Жанр два"));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Обновленная книга"))
+                .andExpect(jsonPath("$.author.fullName").value("Автор один"))
+                .andExpect(jsonPath("$.genre.name").value("Жанр два"));
     }
 
     @Test
     void deleteBook() throws Exception {
         Mockito.doNothing().when(bookService).deleteById(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("http://localhost:8080/api/v1/book/{id}", 1L))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(delete("http://localhost:8080/api/v1/book/{id}", 1L))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
