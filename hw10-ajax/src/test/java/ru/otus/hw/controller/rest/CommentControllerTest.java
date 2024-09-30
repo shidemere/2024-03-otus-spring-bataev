@@ -63,7 +63,7 @@ class CommentControllerTest {
         BookDto dto = new BookDto(
                 1L, "Какая то книга", new AuthorDto(1L, "Имя автора"), new GenreDto(1L, "Имя жанра")
         );
-        CommentDto requestDto = new CommentDto(null, "Круто!", dto);
+        CommentCreateDto requestDto = new CommentCreateDto( "Круто!", 1L);
         CommentDto responseDto = new CommentDto(1L, "Круто!", dto);
 
         when(commentService.create(any(CommentCreateDto.class))).thenReturn(responseDto);
