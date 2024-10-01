@@ -26,9 +26,18 @@ function populateBookSelect(books) {
     });
 }
 
-// Функция для отображения уведомления
-function showNotification() {
+// Функция для отображения уведомления с произвольным сообщением
+function showNotification(message, isError = false) {
     const notification = document.getElementById('notification');
+    notification.textContent = message;  // Устанавливаем текст уведомления
+
+    // Если это ошибка, изменяем стиль уведомления
+    if (isError) {
+        notification.style.backgroundColor = '#dc3545'; // Красный цвет для ошибок
+    } else {
+        notification.style.backgroundColor = '#28a745'; // Зеленый цвет для успеха
+    }
+
     notification.classList.add('show');
 
     // Скрыть уведомление через 3 секунды
@@ -53,11 +62,8 @@ document.getElementById('add-comment-form').addEventListener('submit', async (e)
     // Формируем объект с минимальными данными для передачи
     const newComment = {
         text,
-        book: {
-            id: bookId, // Передаём только ID книги
-        }
+        bookId
     };
-
     try {
         const response = await fetch('/api/v1/comment', {
             method: 'POST',
@@ -69,15 +75,21 @@ document.getElementById('add-comment-form').addEventListener('submit', async (e)
 
         if (response.ok) {
             // Показываем уведомление после успешного добавления
-            showNotification();
+            showNotification('Comment was added');
 
             // Очищаем форму для добавления нового комментария
             document.getElementById('add-comment-form').reset();
+        } else if (response.status === 403) {
+            // Показываем уведомление об ошибке 403
+            showNotification('Недостаточно прав для добавления', true);
         } else {
-            console.error('Failed to add the comment');
+            // Обработка других ошибок
+            console.error('Failed to add the comment. Status code:', response.status);
+            showNotification('Произошла ошибка при добавлении комментария', true);
         }
     } catch (error) {
         console.error('Error:', error);
+        showNotification('Произошла ошибка при добавлении комментария', true);
     }
 });
 

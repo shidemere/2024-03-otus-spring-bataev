@@ -110,6 +110,7 @@ document.getElementById('add-book-form').addEventListener('submit', async (e) =>
             showNotification('Недостаточно прав для добавления', true);
         } else {
             // Обработка других ошибок
+            console.log(response);
             console.error('Failed to add the book. Status code:', response.status);
             showNotification('Произошла ошибка при добавлении книги', true);
         }

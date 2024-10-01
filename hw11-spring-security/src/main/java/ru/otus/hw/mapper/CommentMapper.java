@@ -1,6 +1,7 @@
 package ru.otus.hw.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import ru.otus.hw.dto.CommentCreateDto;
 import ru.otus.hw.dto.CommentDto;
@@ -11,5 +12,7 @@ public interface CommentMapper {
 
     Comment toComment(CommentDto dto);
     CommentDto toCommentDto(Comment comment);
+    @Mapping(source = "bookId", target = "book.id")
     Comment toComment(CommentCreateDto dto);
+
 }

@@ -31,3 +31,11 @@ create table if not exists comments
     book_id     bigint references books (id) on delete cascade,
     primary key (id)
 );
+
+CREATE TABLE public.users
+(
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                              username VARCHAR(255) NOT NULL UNIQUE,
+                              password VARCHAR(255) NOT NULL,
+                              role VARCHAR(50) NOT NULL
+);

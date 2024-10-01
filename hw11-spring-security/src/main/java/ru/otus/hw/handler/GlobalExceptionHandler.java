@@ -2,16 +2,23 @@ package ru.otus.hw.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.http.HttpStatus;
+import ru.otus.hw.controller.rest.AuthorController;
+import ru.otus.hw.controller.rest.BookController;
+import ru.otus.hw.controller.rest.CommentController;
+import ru.otus.hw.controller.rest.GenreController;
 import ru.otus.hw.dto.ErrorMessage;
 
-@ControllerAdvice(basePackageClasses = {
-
-})
+@RestControllerAdvice(basePackageClasses = {
+        AuthorController.class,
+        BookController.class,
+        CommentController.class,
+        GenreController.class}
+)
 @Slf4j
 public class GlobalExceptionHandler {
 
