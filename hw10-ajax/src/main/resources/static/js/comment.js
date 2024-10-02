@@ -53,9 +53,7 @@ document.getElementById('add-comment-form').addEventListener('submit', async (e)
     // Формируем объект с минимальными данными для передачи
     const newComment = {
         text,
-        book: {
-            id: bookId, // Передаём только ID книги
-        }
+        bookId
     };
 
     try {
