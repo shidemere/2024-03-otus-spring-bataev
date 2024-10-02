@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Author</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/css/author.css">
+</head>
+<body>
+
+<!-- Форма добавления книги -->
+<form id="add-author-form">
+
+    <h3>Add New Author:</h3>
+
+    <div class="row">
+        <label for="author-title-input">Title:</label>
+        <input id="author-title-input" name="fullName" type="text" placeholder="Enter author name" required />
+    </div>
+
+
+    <div class="row">
+        <button type="submit" class="button save-button">Add</button>
+        <a href="/list" methods="get" class="button cancel-button">Cancel</a>
+    </div>
+</form>
+
+<!-- Всплывающее окно для уведомлений -->
+<div id="notification" class="notification">
+    <p>Author was added</p>
+</div>
+
+<script src="/js/author.js"></script>
+</body>
+</html>
