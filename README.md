@@ -41,6 +41,6 @@
 
 > Находится в `hw10-ajax`
 
-### Spring Security: Механизмы аутентификации // ДЗ
+### #22 Spring Security: Механизмы аутентификации // ДЗ
 
 > Находится в `hw11-spring-security`
