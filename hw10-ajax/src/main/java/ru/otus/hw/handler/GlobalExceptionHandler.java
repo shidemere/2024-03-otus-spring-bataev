@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
     public ErrorMessage handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        log.error("Entity not found exception: {}", ex.getMessage() + "!!!!!!");
+        log.error("Entity not found exception: {}", ex.getMessage());
         return new ErrorMessage(ex.getMessage());
     }
 
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage handleGlobalException(Exception ex, WebRequest request) {
-        log.error("General exception: " + ex);
+        log.error("General exception: ", ex);
         return new ErrorMessage(ex.getMessage());
     }
 }

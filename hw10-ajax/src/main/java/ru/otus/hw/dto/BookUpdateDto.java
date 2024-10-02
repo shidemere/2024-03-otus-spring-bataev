@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class BookUpdateDto {
 
+    @NotNull
     private Long id;
 
     @NotBlank(message = "The book title must contain at least one simbol.")
