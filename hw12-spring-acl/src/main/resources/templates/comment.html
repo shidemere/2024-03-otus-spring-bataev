@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Comment</title>
+    <link rel="stylesheet" href="/css/comment.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+
+<!-- Форма добавления комментария -->
+<form id="add-comment-form">
+    <h3>Add New Comment:</h3>
+
+    <div class="row">
+        <label for="comment-text-input">Comment:</label>
+        <textarea id="comment-text-input" name="text" placeholder="Enter your comment" required></textarea>
+    </div>
+
+    <div class="row">
+        <label for="book-select-input">Book:</label>
+        <select id="book-select-input" name="bookId" required>
+            <option value="" disabled selected>Select a book</option>
+            <!-- Книги будут загружены через JS -->
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="button save-button">Add</button>
+        <a href="/list" class="button cancel-button">Cancel</a>
+    </div>
+</form>
+
+<!-- Всплывающее окно для уведомлений -->
+<div id="notification" class="notification">
+    <p>Comment was added</p>
+</div>
+
+<script src="/js/comment.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+/* Общие стили для страницы */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Стиль для формы */
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+/* Заголовок формы */
+h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* Стили для строк формы */
+.row {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+}
+
+/* Стили для кнопок */
+.button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 48%;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Дополнительные стили для выравнивания кнопок */
+.row:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Добавим стили для уведомлений */
+.notification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    z-index: 1000;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Для эффекта появления */
+.notification.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Для эффекта скрытия */
+.notification.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <link rel="stylesheet" href="/css/save.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+
+<!-- Форма добавления книги -->
+<form id="add-book-form">
+    <h3>Add New Book:</h3>
+
+    <div class="row">
+        <label for="book-title-input">Title:</label>
+        <input id="book-title-input" name="title" type="text" placeholder="Enter book title" required />
+    </div>
+
+    <div class="row">
+        <label for="book-author-input">Author:</label>
+        <select id="book-author-input" name="authorId" required>
+            <option value="" disabled selected>Select an author</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-input">Genre:</label>
+        <select id="book-genre-input" name="genreId" required>
+            <option value="" disabled selected>Select a genre</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="button save-button">Add</button>
+        <a href="/list" methods="get" class="button cancel-button">Cancel</a>
+    </div>
+</form>
+
+<!-- Всплывающее окно для уведомлений -->
+<div id="notification" class="notification">
+    <p>Book was added</p>
+</div>
+
+<script src="/js/save.js"></script>
+</body>
+</html>
