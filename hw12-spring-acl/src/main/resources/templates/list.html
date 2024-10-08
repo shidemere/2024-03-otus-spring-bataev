@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of All Books</title>
+    <link rel="stylesheet" href="/css/list.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+<div class="container">
+    <h1>Books:</h1>
+    <table class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody id="book-table-body">
+        <!-- Строки будут заполнены динамически через JS -->
+        </tbody>
+    </table>
+
+    <!-- Кнопки для добавления -->
+    <div class="button-container">
+        <form id="add-book-page" action="/save" method="get">
+            <button type="submit" class="button">Add Book</button>
+        </form>
+
+        <form id="add-author-page" action="/author" method="get">
+            <button type="submit" class="button">Add Author</button>
+        </form>
+
+        <form id="add-genre-page" action="/genre" method="get">
+            <button type="submit" class="button">Add Genre</button>
+        </form>
+
+        <form id="add-comment-page" action="/comment" method="get">
+            <button type="submit" class="button">Add Comment</button>
+        </form>
+    </div>
+</div>
+<script src="/js/list.js"></script>
+</body>
+</html>
