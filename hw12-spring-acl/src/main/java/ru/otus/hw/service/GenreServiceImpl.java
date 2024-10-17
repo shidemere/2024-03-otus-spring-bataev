@@ -23,7 +23,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional(readOnly = true)
-    @PostFilter("hasPermission(@genreMapperImpl.toGenre(filterObject), 'READ')")
+    @PostFilter("hasPermission(filterObject, 'READ')")
     public List<GenreDto> findAll() {
         List<Genre> responseList = genreRepository.findAll();
         return new ArrayList<>(responseList.stream().map(genreMapper::toGenreDto).toList());
@@ -35,12 +35,13 @@ public class GenreServiceImpl implements GenreService {
     public GenreDto save(GenreDto genreDto) {
         Genre saved = genreRepository.save(genreMapper.toGenre(genreDto));
         //выдача прав
-        grantService.setReadGrant(saved);
-        grantService.setWriteGrant(saved);
-        grantService.setCreateGrant(saved);
-        grantService.setDeleteGrant(saved);
-        grantService.setAdminGrant(saved);
+        GenreDto dto = genreMapper.toGenreDto(saved);
+        grantService.setReadGrant(dto);
+        grantService.setWriteGrant(dto);
+        grantService.setCreateGrant(dto);
+        grantService.setDeleteGrant(dto);
+        grantService.setAdminGrant(dto);
 
-        return genreMapper.toGenreDto(saved);
+        return dto;
     }
 }

@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.model.Book', 'READ')")
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.BookDto', 'READ')")
     public BookDto findById(long id) {
         String msg = String.format("Книги с данным {ID=%d} нет в базе.", id);
         Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(msg));
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    @PostFilter("hasPermission(@bookMapperImpl.toBook(filterObject), 'READ')")
+    @PostFilter("hasPermission(filterObject, 'READ')")
     public List<BookDto> findAll() {
         List<Book> all = bookRepository.findAll();
          return new ArrayList<>(all.stream()
@@ -62,19 +62,18 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(author);
         book.setGenre(genre);
         Book savedBook = bookRepository.save(book);
+        BookDto responseDto = bookMapper.toBookDto(savedBook);
         //выдача прав
-        grantService.setReadGrant(savedBook);
-        grantService.setWriteGrant(savedBook);
-        grantService.setCreateGrant(savedBook);
-        grantService.setDeleteGrant(savedBook);
-        grantService.setAdminGrant(savedBook);
+        grantService.setReadGrant(responseDto);
+        grantService.setWriteGrant(responseDto);
+        grantService.setDeleteGrant(responseDto);
 
-        return bookMapper.toBookDto(savedBook);
+        return responseDto;
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasPermission(@bookMapperImpl.toBook(#dto), 'WRITE')")
+    @PreAuthorize("hasPermission(dto, 'WRITE')")
     public BookDto update(BookUpdateDto dto) {
         String bookErrMsg = "Нет книги для обновления";
         Book book = bookRepository.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException(bookErrMsg));
@@ -97,7 +96,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.model.Book', 'DELETE')")
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.BookDto', 'DELETE')")
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }

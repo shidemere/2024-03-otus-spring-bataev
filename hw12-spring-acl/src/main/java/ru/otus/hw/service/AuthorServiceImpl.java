@@ -23,7 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    @PostFilter("hasPermission(@authorMapperImpl.toAuthor(filterObject), 'READ')")
+    @PostFilter("hasPermission(filterObject, 'READ')")
     public List<AuthorDto> findAll() {
         List<Author> responseList = authorRepository.findAll();
         return new ArrayList<>(responseList.stream().map(authorMapper::toAuthorDto).toList());
@@ -36,14 +36,15 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDto save(AuthorDto authorDto) {
         Author saved = authorRepository.save(authorMapper.toAuthor(authorDto));
 
+        AuthorDto dto = authorMapper.toAuthorDto(saved);
         //выдача прав
-        grantService.setReadGrant(saved);
-        grantService.setWriteGrant(saved);
-        grantService.setCreateGrant(saved);
-        grantService.setDeleteGrant(saved);
-        grantService.setAdminGrant(saved);
+        grantService.setReadGrant(dto);
+        grantService.setWriteGrant(dto);
+        grantService.setCreateGrant(dto);
+        grantService.setDeleteGrant(dto);
+        grantService.setAdminGrant(dto);
 
 
-        return authorMapper.toAuthorDto(saved);
+        return dto;
     }
 }

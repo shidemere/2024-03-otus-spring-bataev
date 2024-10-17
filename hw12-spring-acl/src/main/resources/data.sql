@@ -37,10 +37,10 @@ VALUES ('admin', '$2a$10$a5G4QCc3YEstJEO8vd2DQuc0QEu14aQE7gQSQqj/WZA2q8iGG8rSS',
 
 -- даём понять Spring ACL какими классами мы будем управлять
 INSERT INTO acl_class (class, class_id_type)
-VALUES  ('ru.otus.hw.model.Book', 'java.lang.Long'),
-        ('ru.otus.hw.model.Author', 'java.lang.Long'),
-        ('ru.otus.hw.model.Genre', 'java.lang.Long'),
-        ('ru.otus.hw.model.Comment', 'java.lang.Long');
+VALUES  ('ru.otus.hw.dto.BookDto', 'java.lang.Long'),
+        ('ru.otus.hw.dto.AuthorDto', 'java.lang.Long'),
+        ('ru.otus.hw.dto.GenreDto', 'java.lang.Long'),
+        ('ru.otus.hw.dto.CommentDto', 'java.lang.Long');
 
 insert into acl_sid (principal, sid)
 values  (true, 'admin'),

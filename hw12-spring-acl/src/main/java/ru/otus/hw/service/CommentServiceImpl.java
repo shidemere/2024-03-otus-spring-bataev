@@ -24,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.model.Book', 'READ')")
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.BookDto', 'READ')")
     public List<CommentDto> findByBookId(long id) {
         List<Comment> commentList = commentRepository.findByBookId(id);
         return new ArrayList<>(commentList.stream().map(commentMapper::toCommentDto).toList());
@@ -36,14 +36,16 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto create(CommentCreateDto dto) {
         Comment saved = commentRepository.save(commentMapper.toComment(dto));
 
-        //выдача прав
-        grantService.setReadGrant(saved);
-        grantService.setWriteGrant(saved);
-        grantService.setCreateGrant(saved);
-        grantService.setDeleteGrant(saved);
-        grantService.setAdminGrant(saved);
+        CommentDto responseDto = commentMapper.toCommentDto(saved);
 
-        return commentMapper.toCommentDto(saved);
+        //выдача прав
+        grantService.setReadGrant(responseDto);
+        grantService.setWriteGrant(responseDto);
+        grantService.setCreateGrant(responseDto);
+        grantService.setDeleteGrant(responseDto);
+        grantService.setAdminGrant(responseDto);
+
+        return responseDto;
     }
 
 
