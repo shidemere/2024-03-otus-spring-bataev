@@ -35,8 +35,8 @@ import lombok.ToString;
 })
 public class SQLBook {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="books_seq")
-    @SequenceGenerator(name="books_seq", sequenceName="seq_books", allocationSize=10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_seq")
+    @SequenceGenerator(name = "books_seq", sequenceName = "seq_books", allocationSize = 10)
     private long id;
 
     private String title;

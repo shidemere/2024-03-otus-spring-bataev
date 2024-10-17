@@ -24,3 +24,7 @@ spring:
 logging:
   level:
     org.apache.catalina: DEBUG
+
+
+salavat:
+  age: 25

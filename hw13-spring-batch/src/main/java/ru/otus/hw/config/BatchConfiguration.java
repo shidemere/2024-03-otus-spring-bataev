@@ -413,7 +413,10 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step cleanupStep(MethodInvokingTaskletAdapter cleanupTasklet, PlatformTransactionManager platformTransactionManager) {
+    public Step cleanupStep(
+            MethodInvokingTaskletAdapter cleanupTasklet,
+            PlatformTransactionManager platformTransactionManager
+    ) {
         return new StepBuilder("cleanupStep", jobRepository)
                 .tasklet(cleanupTasklet, platformTransactionManager)
                 .build();

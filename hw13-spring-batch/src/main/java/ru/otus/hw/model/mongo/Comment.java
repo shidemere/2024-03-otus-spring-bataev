@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 public class Comment {
+
     @Id
     private String id;
 

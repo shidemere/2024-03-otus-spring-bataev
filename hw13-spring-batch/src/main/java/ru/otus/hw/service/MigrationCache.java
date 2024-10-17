@@ -18,8 +18,11 @@ public class MigrationCache {
 
     // Кэш для каждой сущности
     private final ConcurrentHashMap<String, SQLGenre> genreCache = new ConcurrentHashMap<>();
+
     private final ConcurrentHashMap<String, SQLAuthor> authorCache = new ConcurrentHashMap<>();
+
     private final ConcurrentHashMap<String, SQLBook> bookCache = new ConcurrentHashMap<>();
+
     private final ConcurrentHashMap<String, SQLComment> commentCache = new ConcurrentHashMap<>();
 
 }

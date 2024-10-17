@@ -13,10 +13,15 @@ import org.springframework.shell.standard.ShellMethod;
 public class ApplicationConsole {
 
     private final JobLauncher jobLauncher;
+
     private final Job importAuthorJob;
+
     private final Job importGenreJob;
+
     private final Job importBookJob;
+
     private final Job importCommentJob;
+
     private final Job clearDatabaseJob;
 
     private void showAvailableCommands() {

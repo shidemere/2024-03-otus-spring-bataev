@@ -23,9 +23,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SQLAuthor {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="authors_seq")
-    @SequenceGenerator(name="authors_seq", sequenceName="seq_authors", allocationSize=10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authors_seq")
+    @SequenceGenerator(name = "authors_seq", sequenceName = "seq_authors", allocationSize = 10)
     private long id;
 
     @Column(name = "full_name")

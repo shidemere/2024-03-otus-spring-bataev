@@ -29,8 +29,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class SQLComment {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="comments_seq")
-    @SequenceGenerator(name="comments_seq", sequenceName="seq_comments", allocationSize=10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comments_seq")
+    @SequenceGenerator(name = "comments_seq", sequenceName = "seq_comments", allocationSize = 10)
     private long id;
 
     @Column(name = "comment_text")

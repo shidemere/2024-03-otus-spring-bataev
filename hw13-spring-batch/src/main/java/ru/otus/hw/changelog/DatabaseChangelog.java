@@ -51,10 +51,15 @@ public class DatabaseChangelog {
 
     @ChangeSet(order = "004", id = "insertBooks", author = "shidemere")
     public void insertBooks(MongockTemplate template) {
-
-        Author adams = template.findOne(Query.query(Criteria.where("fullName").is("Дуглас Адамс")), Author.class);
-        Author dostoevskiy = template.findOne(Query.query(Criteria.where("fullName").is("Фёдор Достоевский")), Author.class);
-        Author sapolskiy = template.findOne(Query.query(Criteria.where("fullName").is("Роберт Сапольски")), Author.class);
+        Author adams = template.findOne(
+                Query.query(Criteria.where("fullName").is("Дуглас Адамс")), Author.class
+        );
+        Author dostoevskiy = template.findOne(
+                Query.query(Criteria.where("fullName").is("Фёдор Достоевский")), Author.class
+        );
+        Author sapolskiy = template.findOne(
+                Query.query(Criteria.where("fullName").is("Роберт Сапольски")), Author.class
+        );
 
         // Находим жанры по имени
         Genre scifi = template.findOne(Query.query(Criteria.where("name").is("Научная фантастика")), Genre.class);
@@ -62,21 +67,9 @@ public class DatabaseChangelog {
         Genre nonFiction = template.findOne(Query.query(Criteria.where("name").is("Нон-фикшн")), Genre.class);
 
         List<Book> documents = List.of(
-                Book.builder()
-                        .title("Автостопом по галактике")
-                        .author(adams)
-                        .genre(scifi)
-                        .build(),
-                Book.builder()
-                        .title("Идиот")
-                        .author(dostoevskiy)
-                        .genre(roman)
-                        .build(),
-                Book.builder()
-                        .title("Биология добра и зла")
-                        .author(sapolskiy)
-                        .genre(nonFiction)
-                        .build()
+                Book.builder().title("Автостопом по галактике").author(adams).genre(scifi).build(),
+                Book.builder().title("Идиот").author(dostoevskiy).genre(roman).build(),
+                Book.builder().title("Биология добра и зла").author(sapolskiy).genre(nonFiction).build()
         );
 
         documents.forEach(template::save);
@@ -85,23 +78,20 @@ public class DatabaseChangelog {
     @ChangeSet(order = "005", id = "insertComments", author = "shidemere")
     public void insertComments(MongockTemplate template) {
 
-        Book idiot = template.findOne(Query.query(Criteria.where("title").is("Идиот")), Book.class);
-        Book travelByGalactic = template.findOne(Query.query(Criteria.where("title").is("Автостопом по галактике")), Book.class);
-        Book biologyOfEvilAndGood = template.findOne(Query.query(Criteria.where("title").is("Биология добра и зла")), Book.class);
+        Book idiot = template.findOne(
+                Query.query(Criteria.where("title").is("Идиот")), Book.class
+        );
+        Book travelByGalactic = template.findOne(
+                Query.query(Criteria.where("title").is("Автостопом по галактике")), Book.class
+        );
+        Book biologyOfEvilAndGood = template.findOne(
+                Query.query(Criteria.where("title").is("Биология добра и зла")), Book.class
+        );
 
         List<Comment> documents = List.of(
-                Comment.builder()
-                        .text("Идиот - хорошая книга")
-                        .book(idiot)
-                        .build(),
-                Comment.builder()
-                        .text("Автостопом по галактике - хорошая книга")
-                        .book(travelByGalactic)
-                        .build(),
-                Comment.builder()
-                        .text("Биология добра и зла - хорошая книга")
-                        .book(biologyOfEvilAndGood)
-                        .build()
+                Comment.builder().text("Идиот - хорошая книга").book(idiot).build(),
+                Comment.builder().text("Автостопом по галактике - хорошая книга").book(travelByGalactic).build(),
+                Comment.builder().text("Биология добра и зла - хорошая книга").book(biologyOfEvilAndGood).build()
         );
 
         documents.forEach(template::save);

@@ -2,9 +2,7 @@ package ru.otus.hw.config;
 
 import org.h2.tools.Server;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 import java.sql.SQLException;
 
@@ -22,6 +20,7 @@ public class H2TcpConfiguration implements SmartLifecycle {
      * URL - jdbc:h2:tcp://localhost:9092/mem:testdb
      */
     private Server server;
+
     private boolean running = false;
 
     @Override

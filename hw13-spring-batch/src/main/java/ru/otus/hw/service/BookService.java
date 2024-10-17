@@ -18,7 +18,9 @@ public class BookService {
     public SQLBook toSqlBook(Book book) {
         SQLBook sqlBook = new SQLBook();
         sqlBook.setTitle(book.getTitle());
-        Optional<SQLAuthor> sqlAuthor = Optional.ofNullable(migrationCache.getAuthorCache().get(book.getAuthor().getId()));
+        Optional<SQLAuthor> sqlAuthor = Optional.ofNullable(
+                migrationCache.getAuthorCache().get(book.getAuthor().getId())
+        );
         Optional<SQLGenre> sqlGenre = Optional.ofNullable(migrationCache.getGenreCache().get(book.getGenre().getId()));
         sqlBook.setAuthor(sqlAuthor.orElse(null));
         sqlBook.setGenre(sqlGenre.orElse(null));

@@ -22,9 +22,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SQLGenre {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="genres_seq")
-    @SequenceGenerator(name="genres_seq", sequenceName="seq_genres", allocationSize=10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genres_seq")
+    @SequenceGenerator(name = "genres_seq", sequenceName = "seq_genres", allocationSize = 10)
     private long id;
 
     private String name;
