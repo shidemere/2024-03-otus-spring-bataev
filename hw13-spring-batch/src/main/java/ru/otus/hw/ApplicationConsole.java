@@ -31,7 +31,9 @@ public class ApplicationConsole {
 
     @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
     public void startMigrationJobWithJobLauncher() throws Exception {
-        JobExecution authorsAndGenres = jobLauncher.run(importGenreAndAuthorJob, new JobParametersBuilder().toJobParameters());
+        JobExecution authorsAndGenres = jobLauncher.run(
+                importGenreAndAuthorJob, new JobParametersBuilder().toJobParameters()
+        );
         JobExecution books = jobLauncher.run(importBookJob, new JobParametersBuilder().toJobParameters());
         JobExecution comments = jobLauncher.run(importCommentJob, new JobParametersBuilder().toJobParameters());
 

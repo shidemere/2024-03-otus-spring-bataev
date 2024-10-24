@@ -7,9 +7,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import ru.otus.hw.model.mongo.Comment;
 import ru.otus.hw.model.mongo.DocumentAuthor;
 import ru.otus.hw.model.mongo.DocumentBook;
-import ru.otus.hw.model.mongo.Comment;
 import ru.otus.hw.model.mongo.DocumentGenre;
 
 import java.util.HashMap;
@@ -60,16 +60,17 @@ public class DatabaseChangelog {
         DocumentAuthor sapolskiy = template.findOne(
                 Query.query(Criteria.where("fullName").is("Роберт Сапольски")), DocumentAuthor.class
         );
-
-        // Находим жанры по имени
-        DocumentGenre scifi = template.findOne(Query.query(Criteria.where("name").is("Научная фантастика")), DocumentGenre.class);
+        DocumentGenre scifi = template.findOne(Query.query(Criteria.where("name")
+                .is("Научная фантастика")), DocumentGenre.class);
         DocumentGenre roman = template.findOne(Query.query(Criteria.where("name").is("Роман")), DocumentGenre.class);
-        DocumentGenre nonFiction = template.findOne(Query.query(Criteria.where("name").is("Нон-фикшн")), DocumentGenre.class);
-
+        DocumentGenre nonFiction = template.findOne(Query.query(Criteria.where("name")
+                .is("Нон-фикшн")), DocumentGenre.class);
         List<DocumentBook> documents = List.of(
-                DocumentBook.builder().title("Автостопом по галактике").documentAuthor(adams).documentGenre(scifi).build(),
+                DocumentBook
+                        .builder().title("Автостопом по галактике").documentAuthor(adams).documentGenre(scifi).build(),
                 DocumentBook.builder().title("Идиот").documentAuthor(dostoevskiy).documentGenre(roman).build(),
-                DocumentBook.builder().title("Биология добра и зла").documentAuthor(sapolskiy).documentGenre(nonFiction).build()
+                DocumentBook
+                        .builder().title("Биология добра и зла").documentAuthor(sapolskiy).documentGenre(nonFiction).build()
         );
 
         documents.forEach(template::save);

@@ -22,7 +22,7 @@ public class BookService {
         EntityAuthor entityAuthor = migrationCache.getAuthorCache().get(documentBook.getDocumentAuthor().getId());
         EntityGenre entityGenre = migrationCache.getGenreCache().get(documentBook.getDocumentGenre().getId());
 
-        if(Objects.isNull(entityAuthor) || Objects.isNull(entityGenre)) {
+        if (Objects.isNull(entityAuthor) || Objects.isNull(entityGenre)) {
             String msg = String.format("Для {book=%s} не найден зависимый параметр. {author=%s} | {genre=%s}",
                     documentBook.getTitle(), entityAuthor, entityGenre);
             throw new EntityNotFoundException(msg);
