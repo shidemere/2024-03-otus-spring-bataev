@@ -44,3 +44,7 @@
 ### #22 Spring Security: Механизмы аутентификации // ДЗ
 
 > Находится в `hw11-spring-security`
+
+### #25 Spring Batch // ДЗ 
+
+> Находится в `hw13-spring-batch`
