@@ -1,6 +1,5 @@
 package ru.otus.hw.model.h2;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,18 +16,18 @@ import lombok.ToString;
 @Getter
 @Setter
 @Entity
-@Table(name = "authors", schema = "public")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(of = "id")
+@EqualsAndHashCode(of = "id")
+@Table(name = "genres", schema = "public")
 @AllArgsConstructor
 @NoArgsConstructor
-public class SQLAuthor {
+public class EntityGenre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authors_seq")
-    @SequenceGenerator(name = "authors_seq", sequenceName = "seq_authors", allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genres_seq")
+    @SequenceGenerator(name = "genres_seq", sequenceName = "seq_genres", allocationSize = 10)
     private long id;
 
-    @Column(name = "full_name")
-    private String fullName;
+    private String name;
+
 }

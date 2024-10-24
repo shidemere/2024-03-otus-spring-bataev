@@ -26,5 +26,5 @@ public class Comment {
 
     private String text;
 
-    private Book book;
+    private DocumentBook documentBook;
 }

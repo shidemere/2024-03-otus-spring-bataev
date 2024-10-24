@@ -27,7 +27,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-public class SQLComment {
+public class EntityComment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comments_seq")
     @SequenceGenerator(name = "comments_seq", sequenceName = "seq_comments", allocationSize = 10)
@@ -38,6 +38,6 @@ public class SQLComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    private SQLBook book;
+    private EntityBook book;
 
 }

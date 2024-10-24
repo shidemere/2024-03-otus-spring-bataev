@@ -29,14 +29,14 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.PlatformTransactionManager;
-import ru.otus.hw.model.h2.SQLAuthor;
-import ru.otus.hw.model.h2.SQLBook;
-import ru.otus.hw.model.h2.SQLComment;
-import ru.otus.hw.model.h2.SQLGenre;
-import ru.otus.hw.model.mongo.Author;
-import ru.otus.hw.model.mongo.Book;
+import ru.otus.hw.model.h2.EntityAuthor;
+import ru.otus.hw.model.h2.EntityBook;
+import ru.otus.hw.model.h2.EntityComment;
+import ru.otus.hw.model.h2.EntityGenre;
+import ru.otus.hw.model.mongo.DocumentAuthor;
+import ru.otus.hw.model.mongo.DocumentBook;
 import ru.otus.hw.model.mongo.Comment;
-import ru.otus.hw.model.mongo.Genre;
+import ru.otus.hw.model.mongo.DocumentGenre;
 import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
 import ru.otus.hw.service.CommentService;
@@ -67,38 +67,38 @@ public class BatchConfiguration {
      */
 
     @Bean
-    public MongoPagingItemReader<Author> authorReader(MongoTemplate mongoTemplate) {
-        return new MongoPagingItemReaderBuilder<Author>()
+    public MongoPagingItemReader<DocumentAuthor> authorReader(MongoTemplate mongoTemplate) {
+        return new MongoPagingItemReaderBuilder<DocumentAuthor>()
                 .name("mongoAuthorReader")
                 .template(mongoTemplate)
                 .jsonQuery("{}")
-                .targetType(Author.class)
+                .targetType(DocumentAuthor.class)
                 .sorts(new HashMap<>())
                 .build();
     }
 
     @Bean
-    public JpaItemWriter<SQLAuthor> authorWriter(EntityManagerFactory entityManagerFactory) {
-        JpaItemWriter<SQLAuthor> writer = new JpaItemWriter<>();
+    public JpaItemWriter<EntityAuthor> authorWriter(EntityManagerFactory entityManagerFactory) {
+        JpaItemWriter<EntityAuthor> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
 
     @Bean
-    public ItemProcessor<Author, SQLAuthor> authorProcessor(AuthorService service) {
+    public ItemProcessor<DocumentAuthor, EntityAuthor> authorProcessor(AuthorService service) {
 
         return service::toSqlAuthor;
     }
 
     @Bean
     public Step transformAuthorsStep(
-            ItemReader<Author> authorReader,
-            JpaItemWriter<SQLAuthor> authorWriter,
-            ItemProcessor<Author, SQLAuthor> authorProcessor,
+            ItemReader<DocumentAuthor> authorReader,
+            JpaItemWriter<EntityAuthor> authorWriter,
+            ItemProcessor<DocumentAuthor, EntityAuthor> authorProcessor,
             PlatformTransactionManager platformTransactionManager,
             TaskExecutor simpleTaskExecutor) {
         return new StepBuilder("transformAuthorsStep", jobRepository)
-                .<Author, SQLAuthor>chunk(5, platformTransactionManager)
+                .<DocumentAuthor, EntityAuthor>chunk(5, platformTransactionManager)
                 .reader(authorReader)
                 .processor(authorProcessor)
                 .writer(authorWriter)
@@ -108,8 +108,8 @@ public class BatchConfiguration {
                         logger.info("Начало чтения авторов");
                     }
 
-                    public void afterRead(@NonNull Author author) {
-                        logger.info("Конец чтения для автора {}", author.getFullName());
+                    public void afterRead(@NonNull DocumentAuthor documentAuthor) {
+                        logger.info("Конец чтения для автора {}", documentAuthor.getFullName());
                     }
 
                     public void onReadError(@NonNull Exception e) {
@@ -120,63 +120,42 @@ public class BatchConfiguration {
 
     }
 
-    @Bean
-    public Job importAuthorJob(Step transformAuthorsStep) {
-        return new JobBuilder("AuthorJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .flow(transformAuthorsStep)
-                .end()
-                .listener(new JobExecutionListener() {
-                    @Override
-                    public void beforeJob(@NonNull JobExecution jobExecution) {
-                        logger.info("Начало job для авторов");
-                    }
-
-                    @Override
-                    public void afterJob(@NonNull JobExecution jobExecution) {
-                        logger.info("Конец job для авторов");
-                    }
-                })
-                .build();
-    }
-
-
     /*
      * Работа с жанрами
      */
 
     @Bean
-    public MongoPagingItemReader<Genre> genreReader(MongoTemplate mongoTemplate) {
-        return new MongoPagingItemReaderBuilder<Genre>()
+    public MongoPagingItemReader<DocumentGenre> genreReader(MongoTemplate mongoTemplate) {
+        return new MongoPagingItemReaderBuilder<DocumentGenre>()
                 .name("mongoGenreReader")
                 .template(mongoTemplate)
                 .jsonQuery("{}")
-                .targetType(Genre.class)
+                .targetType(DocumentGenre.class)
                 .sorts(new HashMap<>())
                 .build();
     }
 
     @Bean
-    public JpaItemWriter<SQLGenre> genreWriter(EntityManagerFactory entityManagerFactory) {
-        JpaItemWriter<SQLGenre> writer = new JpaItemWriter<>();
+    public JpaItemWriter<EntityGenre> genreWriter(EntityManagerFactory entityManagerFactory) {
+        JpaItemWriter<EntityGenre> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
 
     @Bean
-    public ItemProcessor<Genre, SQLGenre> genreProcessor(GenreService service) {
+    public ItemProcessor<DocumentGenre, EntityGenre> genreProcessor(GenreService service) {
         return service::toSqlGenre;
     }
 
     @Bean
     public Step transformGenresStep(
-            ItemReader<Genre> genreReader,
-            JpaItemWriter<SQLGenre> genreWriter,
-            ItemProcessor<Genre, SQLGenre> genreProcessor,
+            ItemReader<DocumentGenre> genreReader,
+            JpaItemWriter<EntityGenre> genreWriter,
+            ItemProcessor<DocumentGenre, EntityGenre> genreProcessor,
             PlatformTransactionManager platformTransactionManager,
             TaskExecutor simpleTaskExecutor) {
         return new StepBuilder("transforGenresStep", jobRepository)
-                .<Genre, SQLGenre>chunk(5, platformTransactionManager)
+                .<DocumentGenre, EntityGenre>chunk(5, platformTransactionManager)
                 .reader(genreReader)
                 .processor(genreProcessor)
                 .writer(genreWriter)
@@ -186,8 +165,8 @@ public class BatchConfiguration {
                         logger.info("Начало чтения жанра");
                     }
 
-                    public void afterRead(@NonNull Genre genre) {
-                        logger.info("Конец чтения для жанра {}", genre.getName());
+                    public void afterRead(@NonNull DocumentGenre documentGenre) {
+                        logger.info("Конец чтения для жанра {}", documentGenre.getName());
                     }
 
                     public void onReadError(@NonNull Exception e) {
@@ -197,27 +176,6 @@ public class BatchConfiguration {
                 .build();
 
     }
-
-    @Bean
-    public Job importGenreJob(Step transformGenresStep) {
-        return new JobBuilder("GenreJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .flow(transformGenresStep)
-                .end()
-                .listener(new JobExecutionListener() {
-                    @Override
-                    public void beforeJob(@NonNull JobExecution jobExecution) {
-                        logger.info("Начало job для чтения жанров");
-                    }
-
-                    @Override
-                    public void afterJob(@NonNull JobExecution jobExecution) {
-                        logger.info("Конец job для чтения жанров");
-                    }
-                })
-                .build();
-    }
-
     /*
      * Настройка паралельного запуска для жанров и авторов
      */
@@ -245,43 +203,63 @@ public class BatchConfiguration {
     }
 
 
+    @Bean
+    public Job importGenreAndAuthorJob(Flow splitFlow) {
+        return new JobBuilder("GenreAndAuthorJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
+                .start(splitFlow)
+                .end()
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(@NonNull JobExecution jobExecution) {
+                        logger.info("Начало async job для чтения жанров и авторов");
+                    }
+
+                    @Override
+                    public void afterJob(@NonNull JobExecution jobExecution) {
+                        logger.info("Конец async job для чтения жанров и авторов");
+                    }
+                })
+                .build();
+    }
+
     /*
      *  Работа с книгами
      */
 
 
     @Bean
-    public MongoPagingItemReader<Book> bookReader(MongoTemplate mongoTemplate) {
-        return new MongoPagingItemReaderBuilder<Book>()
+    public MongoPagingItemReader<DocumentBook> bookReader(MongoTemplate mongoTemplate) {
+        return new MongoPagingItemReaderBuilder<DocumentBook>()
                 .name("mongoBookReader")
                 .template(mongoTemplate)
                 .jsonQuery("{}")
-                .targetType(Book.class)
+                .targetType(DocumentBook.class)
                 .sorts(new HashMap<>())
                 .build();
     }
 
     @Bean
-    public JpaItemWriter<SQLBook> bookWriter(EntityManagerFactory entityManagerFactory) {
-        JpaItemWriter<SQLBook> writer = new JpaItemWriter<>();
+    public JpaItemWriter<EntityBook> bookWriter(EntityManagerFactory entityManagerFactory) {
+        JpaItemWriter<EntityBook> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
 
     @Bean
-    public ItemProcessor<Book, SQLBook> bookProcessor(BookService service) {
+    public ItemProcessor<DocumentBook, EntityBook> bookProcessor(BookService service) {
         return service::toSqlBook;
     }
 
     @Bean
     public Step transformBooksStep(
-            ItemReader<Book> bookReader,
-            JpaItemWriter<SQLBook> bookWriter,
-            ItemProcessor<Book, SQLBook> bookProcessor,
+            ItemReader<DocumentBook> bookReader,
+            JpaItemWriter<EntityBook> bookWriter,
+            ItemProcessor<DocumentBook, EntityBook> bookProcessor,
             PlatformTransactionManager platformTransactionManager
             ) {
         return new StepBuilder("transformBooksStep", jobRepository)
-                .<Book, SQLBook>chunk(5, platformTransactionManager)
+                .<DocumentBook, EntityBook>chunk(5, platformTransactionManager)
                 .reader(bookReader)
                 .processor(bookProcessor)
                 .writer(bookWriter)
@@ -290,8 +268,8 @@ public class BatchConfiguration {
                         logger.info("Начало чтения книг");
                     }
 
-                    public void afterRead(@NonNull Book book) {
-                        logger.info("Конец чтения для книги {}", book.getTitle());
+                    public void afterRead(@NonNull DocumentBook documentBook) {
+                        logger.info("Конец чтения для книги {}", documentBook.getTitle());
                     }
 
                     public void onReadError(@NonNull Exception e) {
@@ -340,26 +318,26 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public JpaItemWriter<SQLComment> commentWriter(EntityManagerFactory entityManagerFactory) {
-        JpaItemWriter<SQLComment> writer = new JpaItemWriter<>();
+    public JpaItemWriter<EntityComment> commentWriter(EntityManagerFactory entityManagerFactory) {
+        JpaItemWriter<EntityComment> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
 
     @Bean
-    public ItemProcessor<Comment, SQLComment> sqlCommentProcessor(CommentService service) {
+    public ItemProcessor<Comment, EntityComment> sqlCommentProcessor(CommentService service) {
         return service::toSqlComment;
     }
 
     @Bean
     public Step transformCommentsStep(
             ItemReader<Comment> commentReader,
-            JpaItemWriter<SQLComment> commentWriter,
-            ItemProcessor<Comment, SQLComment> commentProcessor,
+            JpaItemWriter<EntityComment> commentWriter,
+            ItemProcessor<Comment, EntityComment> commentProcessor,
             PlatformTransactionManager platformTransactionManager
     ) {
         return new StepBuilder("transformCommentsStep", jobRepository)
-                .<Comment, SQLComment>chunk(5, platformTransactionManager)
+                .<Comment, EntityComment>chunk(5, platformTransactionManager)
                 .reader(commentReader)
                 .processor(commentProcessor)
                 .writer(commentWriter)

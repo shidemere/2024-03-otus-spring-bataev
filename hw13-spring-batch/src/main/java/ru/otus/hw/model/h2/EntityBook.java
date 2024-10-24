@@ -29,11 +29,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@NamedEntityGraph(name = "genre_author_entity_graph", attributeNodes = {
-        @NamedAttributeNode("author"),
-        @NamedAttributeNode("genre"),
-})
-public class SQLBook {
+public class EntityBook {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "books_seq")
     @SequenceGenerator(name = "books_seq", sequenceName = "seq_books", allocationSize = 10)
@@ -43,10 +39,10 @@ public class SQLBook {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private SQLAuthor author;
+    private EntityAuthor author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
-    private SQLGenre genre;
+    private EntityGenre genre;
 }
 

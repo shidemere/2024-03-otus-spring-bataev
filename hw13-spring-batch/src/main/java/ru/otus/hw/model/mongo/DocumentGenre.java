@@ -8,29 +8,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Getter
 @Setter
-@Builder
+@Document(value = "genres")
 @ToString(of = "id")
-@Document(value = "books")
+@Builder
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Book {
+public class DocumentGenre {
     @Id
     private String id;
 
-    private String title;
+    private String name;
 
-    @DBRef(lazy = true)
-    private Author author;
-
-    @DBRef(lazy = true)
-    private Genre genre;
 
 }
-

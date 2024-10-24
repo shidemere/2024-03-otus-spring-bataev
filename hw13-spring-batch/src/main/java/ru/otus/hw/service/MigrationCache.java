@@ -2,10 +2,10 @@ package ru.otus.hw.service;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.model.h2.SQLAuthor;
-import ru.otus.hw.model.h2.SQLBook;
-import ru.otus.hw.model.h2.SQLComment;
-import ru.otus.hw.model.h2.SQLGenre;
+import ru.otus.hw.model.h2.EntityAuthor;
+import ru.otus.hw.model.h2.EntityBook;
+import ru.otus.hw.model.h2.EntityComment;
+import ru.otus.hw.model.h2.EntityGenre;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,12 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MigrationCache {
 
     // Кэш для каждой сущности
-    private final ConcurrentHashMap<String, SQLGenre> genreCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, EntityGenre> genreCache = new ConcurrentHashMap<>();
 
-    private final ConcurrentHashMap<String, SQLAuthor> authorCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, EntityAuthor> authorCache = new ConcurrentHashMap<>();
 
-    private final ConcurrentHashMap<String, SQLBook> bookCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, EntityBook> bookCache = new ConcurrentHashMap<>();
 
-    private final ConcurrentHashMap<String, SQLComment> commentCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, EntityComment> commentCache = new ConcurrentHashMap<>();
 
 }

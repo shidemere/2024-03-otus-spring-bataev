@@ -14,9 +14,7 @@ public class ApplicationConsole {
 
     private final JobLauncher jobLauncher;
 
-    private final Job importAuthorJob;
-
-    private final Job importGenreJob;
+    private final Job importGenreAndAuthorJob;
 
     private final Job importBookJob;
 
@@ -33,13 +31,11 @@ public class ApplicationConsole {
 
     @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
     public void startMigrationJobWithJobLauncher() throws Exception {
-        JobExecution authors = jobLauncher.run(importAuthorJob, new JobParametersBuilder().toJobParameters());
-        JobExecution genres = jobLauncher.run(importGenreJob, new JobParametersBuilder().toJobParameters());
+        JobExecution authorsAndGenres = jobLauncher.run(importGenreAndAuthorJob, new JobParametersBuilder().toJobParameters());
         JobExecution books = jobLauncher.run(importBookJob, new JobParametersBuilder().toJobParameters());
         JobExecution comments = jobLauncher.run(importCommentJob, new JobParametersBuilder().toJobParameters());
 
-        System.out.println(authors);
-        System.out.println(genres);
+        System.out.println(authorsAndGenres);
         System.out.println(books);
         System.out.println(comments);
         showAvailableCommands();
